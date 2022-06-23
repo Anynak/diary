@@ -15,10 +15,14 @@ public class User {
     public User() {
 
     }
+    public User(String login, String passwordHash) {
+        this.login=login;
+        this.passwordHash=passwordHash;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private int userId;
+    private Long userId;
 
     @Column(name="login")
     private String login;
