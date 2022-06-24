@@ -1,6 +1,8 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,10 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
 
+
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
     @Override
@@ -22,8 +26,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public User saveUser(User user) {
+
+        return userRepository.save(user);
     }
 
     @Override
@@ -34,5 +39,10 @@ public class UserServiceImpl implements UserService{
         }else {
             throw new RuntimeException("no such user with id: "+id);
         }
+    }
+
+    @Override
+    public void addRole(Role role) {
+
     }
 }
