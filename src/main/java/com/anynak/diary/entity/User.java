@@ -1,8 +1,10 @@
 package com.anynak.diary.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -26,10 +28,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
+    @NonNull
     private Long userId;
 
+    @Column(name="login")
     @NonNull
-    @Column(name="login", nullable = false)
     private String login;
 
     @Column(name="email")
@@ -42,19 +45,19 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<DiaryPost> diaryPosts = new ArrayList<>();
 
-    @JsonIgnore
+
     @ManyToMany
     @JoinTable(
             name = "user-role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private Set<Role> roleSet = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     public void addRole(Role role){
-        this.roleSet.add(role);
+        this.roles.add(role);
     }
     public void removeRole(Role role){
-        this.roleSet.remove(role);
+        this.roles.remove(role);
     }
 }

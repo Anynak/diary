@@ -1,5 +1,4 @@
 package com.anynak.diary.controller;
-import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.service.RoleService;
 import com.anynak.diary.service.UserService;

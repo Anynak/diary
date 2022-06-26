@@ -2,7 +2,6 @@ package com.anynak.diary.service;
 
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
-import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 

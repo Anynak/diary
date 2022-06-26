@@ -1,5 +1,6 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.RoleName;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public Role getRoleByName(String roleName) {
-        return null;
+    public Role getRoleByName(RoleName roleName) {
+        return roleRepository.findByName(roleName);
     }
 }
