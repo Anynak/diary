@@ -20,8 +20,8 @@ public class Role {
     //@Column(name = "role_name")
     //private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    //@ManyToMany(mappedBy = "roles")
+    //private Collection<User> users;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")

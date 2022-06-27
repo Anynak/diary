@@ -2,6 +2,7 @@ package com.anynak.diary.entity;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

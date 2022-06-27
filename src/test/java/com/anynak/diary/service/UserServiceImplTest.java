@@ -20,13 +20,14 @@ class UserServiceImplTest {
 
     @Test
     void saveUser() {
-        User user = new User();
-        user.setLogin("qqidfhqq");
-        user.setPasswordHash("werddfwrwr");
-        user.setEmail("dfhghdf");
-        Role role = roleService.getRoleByName(RoleName.USER);
-        System.out.println(role);
+        User user =  new User();
+        user.setLogin("admin");
+        user.setPasswordHash("ddd");
+        user.setEmail("dfddhghdf");
+
+        Role role = roleService.getRoleByName(RoleName.ADMIN);
         user.addRole(role);
+
         User user1 = userService.saveUser(user);
         System.out.println(user1);
     }

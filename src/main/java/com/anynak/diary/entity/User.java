@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,19 +43,22 @@ public class User {
     private String passwordHash;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<DiaryPost> diaryPosts = new ArrayList<>();
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user-role",
+            name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public void addRole(Role role){
+        if(roles==null){
+            roles = new HashSet<>();
+        }
         this.roles.add(role);
     }
     public void removeRole(Role role){
