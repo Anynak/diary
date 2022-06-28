@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+//@Data
+@RequiredArgsConstructor
 @Entity
 @SuperBuilder
 @Table(name="user")
 public class User {
-    public User() {
 
-    }
     public User(String login, String passwordHash) {
         this.login=login;
         this.passwordHash=passwordHash;
@@ -54,6 +54,10 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private Set<Role> roles;
+
+    public User() {
+
+    }
 
     public void addRole(Role role){
         if(roles==null){

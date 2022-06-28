@@ -6,7 +6,7 @@ import com.anynak.diary.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -22,15 +22,15 @@ class UserServiceImplTest {
     @Test
     void saveUser() {
         User user =  new User();
-        user.setLogin("admin");
-        user.setPasswordHash(new BCryptPasswordEncoder().encode("hdddf"));
-        user.setEmail("dfddhghdf");
-
-        Role role = roleService.getRoleByName(RoleName.ADMIN);
-        user.addRole(role);
-
-        User user1 = userService.saveUser(user);
-        System.out.println(user1);
+        //user.setLogin("admin");
+        //user.setPasswordHash(new BCryptPasswordEncoder().encode("hdddf"));
+        //user.setEmail("dfddhghdf");
+//
+        //Role role = roleService.getRoleByName(RoleName.ADMIN);
+        //user.addRole(role);
+//
+        //User user1 = userService.saveUser(user);
+        //System.out.println(user1);
     }
 
     @Test
