@@ -6,6 +6,7 @@ import com.anynak.diary.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -22,7 +23,7 @@ class UserServiceImplTest {
     void saveUser() {
         User user =  new User();
         user.setLogin("admin");
-        user.setPasswordHash("ddd");
+        user.setPasswordHash(new BCryptPasswordEncoder().encode("hdddf"));
         user.setEmail("dfddhghdf");
 
         Role role = roleService.getRoleByName(RoleName.ADMIN);
