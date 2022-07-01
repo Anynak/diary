@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -29,13 +30,27 @@ public class SpringSecurityConfig {
     protected UserDetailsService userDetailsService() {
         return null;
     }
-
+    @Bean
+    public InMemoryUserDetailsManager configAuth(){
+        return new InMemoryUserDetailsManager();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().antMatchers("/","index").permitAll()
-                .anyRequest()
-                .authenticated()
+        http.authorizeHttpRequests().antMatchers("/","/index","/login","/register").permitAll()
+                .anyRequest().authenticated()
+                .antMatchers("/account").hasAnyAuthority("USER")
                 .and()
+                .formLogin().and()
+                .httpBasic();
+        return http.build();
+    }
+    @Bean
+    public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().antMatchers("/","/index","/login","/register").permitAll()
+                .anyRequest().authenticated()
+                .antMatchers("/account").hasAnyAuthority("USER")
+                .and()
+                .formLogin().and()
                 .httpBasic();
         return http.build();
     }
