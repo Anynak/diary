@@ -9,6 +9,7 @@ public interface UserService {
     public List<User> getAllUsers();
     public User saveUser(User user);
     public User getUser(Long id);
+    public User getByLogin(String login);
 
     public void addRole(Role role);
 }

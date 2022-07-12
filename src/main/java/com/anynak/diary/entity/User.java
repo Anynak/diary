@@ -2,10 +2,7 @@ package com.anynak.diary.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +15,7 @@ import java.util.Set;
 //@Data
 @RequiredArgsConstructor
 @Entity
+@Data
 @SuperBuilder
 @Table(name="user")
 public class User {
