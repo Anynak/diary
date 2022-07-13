@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private String userName;
-    private String password;
-    private boolean active;
+    private final String userName;
+    private final String password;
+    private final boolean active;
     private List<GrantedAuthority> authority;
 
     public UserDetailsImpl(User user) {
@@ -27,6 +27,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authority = Arrays.stream(user.getRoles().toArray()).map(Object::toString)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+        System.out.println("UserDetailsImpl "+authority);
 
     }
 

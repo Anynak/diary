@@ -2,21 +2,29 @@ package com.anynak.diary.service;
 
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.anynak.diary.RoleName.USER;
+
 @Service
 public class UserServiceImpl implements UserService{
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -27,6 +35,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public User saveUser(User user) {
 
+
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        Role role = roleRepository.findByName(USER);
+        user.addRole(role);
         return userRepository.save(user);
     }
 
