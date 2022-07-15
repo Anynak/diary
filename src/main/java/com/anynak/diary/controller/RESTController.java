@@ -4,6 +4,7 @@ import com.anynak.diary.service.RoleService;
 import com.anynak.diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class RESTController {
         //Role role1 = Role.builder().roleName("BANNED").build();
         //roleService.createNewRole(role1);
         return ResponseEntity.ok().body(userService.getAllUsers());
+        //return ResponseEntity.ok().body("HELLO");
         //return userService.getAllUsers();
     }
     @GetMapping("/users/{id}")
@@ -35,7 +37,7 @@ public class RESTController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<String> home(){
        return ResponseEntity.ok().body("HELLO");
 

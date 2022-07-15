@@ -1,5 +1,5 @@
 package com.anynak.diary;
 
 public enum RoleName {
-    ADMIN, USER, BANNED, PREMIUM
+    ROLE_ADMIN, ROLE_USER, ROLE_BANNED, ROLE_PREMIUM
 }

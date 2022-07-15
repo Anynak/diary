@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.anynak.diary.RoleName.USER;
+import static com.anynak.diary.RoleName.ROLE_USER;
+
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.getAllUsers();
     }
 
     @Override
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService{
 
 
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        Role role = roleRepository.findByName(USER);
+        Role role = roleRepository.findByName(ROLE_USER);
         user.addRole(role);
         return userRepository.save(user);
     }

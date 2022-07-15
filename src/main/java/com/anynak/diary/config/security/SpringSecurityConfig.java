@@ -40,19 +40,22 @@ public class SpringSecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder);
         return daoAuthenticationProvider;
     }
-    @Bean
-    public InMemoryUserDetailsManager configAuth(){
-        return new InMemoryUserDetailsManager();
-    }
+   //@Bean
+   //public InMemoryUserDetailsManager configAuth(){
+   //    return new InMemoryUserDetailsManager();
+   //}
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().disable().csrf().disable().authorizeHttpRequests()
-                .antMatchers("/api/register").permitAll()
-                .anyRequest()
-                .authenticated()
-                //.antMatchers("/api/users").hasAnyRole("ADMIN")
+        http.cors().disable().csrf().disable().authorizeRequests()
+
+                .antMatchers("/api/register","/api").permitAll()
+                .antMatchers("/api/users").hasAnyRole("ADMIN")
+                .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
+                .and()
+                .logout().logoutSuccessUrl("/")
                 .and()
                 .httpBasic();
         return http.build();
