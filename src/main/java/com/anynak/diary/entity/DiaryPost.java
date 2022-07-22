@@ -1,11 +1,13 @@
 package com.anynak.diary.entity;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @Entity
@@ -20,12 +22,14 @@ public class DiaryPost {
     @Column(name="diary_post_id")
     private Long diaryPostId;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
-    private User user;
+
+    //@JoinColumn(name = "user_id")
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //private User user=null;
 
     @Column(name="creation_time")
-    private Timestamp creationTime;
+    //@Temporal(TemporalType.TIMESTAMP)
+    private Date creationTime;
 
     @Column(name="text")
     private String text;

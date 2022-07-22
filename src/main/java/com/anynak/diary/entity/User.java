@@ -37,15 +37,17 @@ public class User {
     @Column(name="email")
     private String email;
 
+    @JsonIgnore
     @Column(name="password_hash")
     private String passwordHash;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
-    private List<DiaryPost> diaryPosts = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<DiaryPost> diaryPosts = null;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -62,6 +64,13 @@ public class User {
             roles = new HashSet<>();
         }
         this.roles.add(role);
+    }
+
+    public void addDiaryPosts(DiaryPost diaryPost){
+        if(diaryPosts==null){
+            diaryPosts = new ArrayList<>();
+        }
+        this.diaryPosts.add(diaryPost);
     }
     public void removeRole(Role role){
         this.roles.remove(role);
