@@ -38,9 +38,8 @@ public class UserServiceImpl implements UserService{
     public User saveUser(User user) {
 
 
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        Role role = roleRepository.findByName(ROLE_USER);
-        user.addRole(role);
+
+
         return userRepository.save(user);
     }
 
@@ -56,6 +55,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getByLogin(String login) {
+        userRepository.findByLogin(login);
         return userRepository.findByLogin(login);
     }
 

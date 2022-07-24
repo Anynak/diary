@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DiaryPostServiceImpl implements DiaryPostService{
@@ -40,5 +41,10 @@ public class DiaryPostServiceImpl implements DiaryPostService{
     @Override
     public List<DiaryPost> findByUser(User user) {
         return null;
+    }
+
+    @Override
+    public void removePost(Set<Long> ids) {
+         diaryPostRepository.deleteAllById(ids);
     }
 }

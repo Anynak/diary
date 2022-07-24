@@ -1,10 +1,8 @@
 package com.anynak.diary.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,47 +15,48 @@ import java.util.Set;
 @Entity
 @Data
 @SuperBuilder
+@NoArgsConstructor
 @Table(name="user")
 public class User {
 
-    public User(String login, String passwordHash) {
-        this.login=login;
-        this.passwordHash=passwordHash;
-    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     @NonNull
     private Long userId;
 
-    @Column(name="login")
+    @JsonIgnore
+    @OneToMany(
+            fetch = FetchType.LAZY
+            ,cascade = CascadeType.ALL
+            //,mappedBy = "user"
+    )
+    @JoinColumn(name = "user_id", nullable = false)
+    private List<DiaryPost> diaryPosts=new ArrayList<>();
+
     @NonNull
+    @Column(name="login", unique = true)
     private String login;
 
     @Column(name="email")
     private String email;
 
     @JsonIgnore
-    @Column(name="password_hash")
-    private String passwordHash;
+    @Column(name="password")
+    private String password;
 
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<DiaryPost> diaryPosts = null;
+
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private Set<Role> roles=null;
-
-    public User() {
-
-    }
 
     public void addRole(Role role){
         if(roles==null){

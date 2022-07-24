@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("FROM User WHERE login = ?1")
-    public User findByLogin(String login);
+    //@Query("FROM User WHERE login = ?1")
+    User findByLogin(String login);
 
-    @Query("SELECT userId, login, passwordHash, email FROM User")
+    @Query("SELECT userId, login, password, email FROM User")
     public List<User> getAllUsers();
 }

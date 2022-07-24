@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -30,6 +32,7 @@ public class DiaryPost {
     @Column(name="creation_time")
     //@Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
+
 
     @Column(name="text")
     private String text;

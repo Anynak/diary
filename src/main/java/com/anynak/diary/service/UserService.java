@@ -2,7 +2,10 @@ package com.anynak.diary.service;
 
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 public interface UserService {
