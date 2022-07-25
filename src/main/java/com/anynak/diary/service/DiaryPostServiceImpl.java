@@ -5,6 +5,7 @@ import com.anynak.diary.entity.User;
 import com.anynak.diary.repositories.DiaryPostRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class DiaryPostServiceImpl implements DiaryPostService{
     public DiaryPost addBuUserName(DiaryPost diaryPost, String userName) {
         //User user = userService.getByLogin(userName);
         //diaryPost.setUser(user);
-        diaryPost.setCreationTime(new Date());
+        diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
         return diaryPostRepository.save(diaryPost);
     }
 

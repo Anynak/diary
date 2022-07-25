@@ -26,7 +26,7 @@ public class User {
     @NonNull
     private Long userId;
 
-    @JsonIgnore
+
     @OneToMany(
             fetch = FetchType.LAZY
             ,cascade = CascadeType.ALL
@@ -42,14 +42,13 @@ public class User {
     @Column(name="email")
     private String email;
 
-    @JsonIgnore
     @Column(name="password")
     private String password;
 
 
 
 
-    @JsonIgnore
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @JoinTable(
             name = "user_role",

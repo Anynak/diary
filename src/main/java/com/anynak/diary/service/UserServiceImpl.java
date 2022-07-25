@@ -1,5 +1,7 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.dto.UserRequest;
+import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.repositories.RoleRepository;
@@ -35,14 +37,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User saveUser(User user) {
+    public User registerUser(UserRequest userRequest) {
 
-
-
-
+        User user = new User();
+        user.setLogin(userRequest.getLogin());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        Role role = roleRepository.findByName(ROLE_USER);
+        user.addRole(role);
         return userRepository.save(user);
     }
-
+    @Override
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
     @Override
     public User getUser(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);

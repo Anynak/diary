@@ -29,9 +29,9 @@ public class DiaryPost {
     //@ManyToOne(fetch = FetchType.LAZY)
     //private User user=null;
 
-    @Column(name="creation_time")
+    @Column(name="creation_UNIX_SEC")
     //@Temporal(TemporalType.TIMESTAMP)
-    private Date creationTime;
+    private Long creation_UNIX_SEC;
 
 
     @Column(name="text")

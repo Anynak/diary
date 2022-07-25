@@ -1,7 +1,9 @@
 package com.anynak.diary.controller;
 import com.anynak.diary.dto.DiaryPostRequest;
+import com.anynak.diary.dto.DiaryPostResponse;
+import com.anynak.diary.dto.UserRequest;
+import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.DiaryPost;
-import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.service.DiaryPostService;
 import com.anynak.diary.service.RoleService;
@@ -12,17 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 //TODO наделать дто-шек, добить валидацию, секурица
-import static com.anynak.diary.RoleName.ROLE_USER;
+
 
 @RestController
 @RequestMapping("/api")
@@ -51,27 +53,27 @@ public class RESTController {
 
     /** private information about the users profile*/
     @GetMapping("/profile")
-    public ResponseEntity<User> profile(Principal principal){
+    public ResponseEntity<UserResponse> profile(Principal principal){
         System.out.println(principal.getName());
         User user = userService.getByLogin(principal.getName());
-       return ResponseEntity.ok().body(user);
+       return new ResponseEntity<>(new UserResponse(user), HttpStatus.OK);
 
     }
     /** create user */
     @PostMapping("/register")
-    public User addUser(@RequestBody User user){
-        System.out.println(user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = roleService.getRoleByName(ROLE_USER);
-        user.addRole(role);
-        userService.saveUser(user);
-        return user;
+    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest, Principal principal, BindingResult bindingResult){
+        if(principal==null){
+            UserResponse response = new UserResponse(userService.registerUser(userRequest));
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
 
     }
     /**get post*/
     @GetMapping("/post/{id}")
-    public DiaryPost getUser(@PathVariable Long id){
-        return diaryPostService.findBuId(id);
+    public ResponseEntity<DiaryPostResponse> getUser(@PathVariable Long id){
+        DiaryPost diaryPost = diaryPostService.findBuId(id);
+        return new ResponseEntity<>(new DiaryPostResponse(diaryPost), HttpStatus.FOUND);
     }
     /** get all users posts */
     @GetMapping("/diary")
@@ -89,7 +91,7 @@ public class RESTController {
 
         DiaryPost diaryPost = new DiaryPost();
         diaryPost.setText(diaryPostRequest.getText());
-        diaryPost.setCreationTime(new Date());
+        diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
         user.addDiaryPosts(diaryPost);
         //System.out.println(user);
         userService.saveUser(user);

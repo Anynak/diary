@@ -1,5 +1,7 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.dto.UserRequest;
+import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
 import lombok.Data;
@@ -9,10 +11,11 @@ import javax.persistence.Entity;
 import java.util.List;
 
 public interface UserService {
-    public List<User> getAllUsers();
-    public User saveUser(User user);
-    public User getUser(Long id);
-    public User getByLogin(String login);
+    List<User> getAllUsers();
+    User registerUser(UserRequest userRequest);
+    User saveUser(User user);
+    User getUser(Long id);
+    User getByLogin(String login);
 
-    public void addRole(Role role);
+    void addRole(Role role);
 }
