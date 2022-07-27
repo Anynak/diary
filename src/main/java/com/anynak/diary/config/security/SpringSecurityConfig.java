@@ -48,7 +48,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().disable().csrf().disable().authorizeRequests()
 
-                .antMatchers("/api/register","/api").permitAll()
+                .antMatchers("/api/register","/api/logout","/api/login").permitAll()
                 .antMatchers("/api/users").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
 
