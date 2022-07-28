@@ -14,9 +14,4 @@ public class DiaryPostResponse {
     private Long creation_UNIX_SEC;
     private String text;
 
-    public DiaryPostResponse(DiaryPost diaryPost){
-        this.diaryPostId=diaryPost.getDiaryPostId();
-        this.creation_UNIX_SEC=diaryPost.getCreation_UNIX_SEC();
-        this.text=diaryPost.getText();
-    }
 }

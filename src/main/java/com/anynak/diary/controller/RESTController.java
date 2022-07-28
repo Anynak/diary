@@ -6,6 +6,7 @@ import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.mapers.DiaryPostMapper;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.DiaryPostService;
 import com.anynak.diary.service.RoleService;
@@ -25,7 +26,7 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
-//TODO localisation, добить валидацию, секурица, add Mapstruct
+//TODO localisation, добить валидацию, секурица, PostService, add Mapstruct
 
 
 @RestController
@@ -72,7 +73,8 @@ public class RESTController {
         if (principal != null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else {
-            UserResponse response = new UserResponse(userService.registerUser(userRequest));
+            User user = userService.registerUser(userRequest);
+            UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
@@ -85,7 +87,7 @@ public class RESTController {
     @GetMapping("/post/{id}")
     public ResponseEntity<DiaryPostResponse> getUser(@PathVariable Long id) {
         DiaryPost diaryPost = diaryPostService.findBuId(id);
-        return new ResponseEntity<>(new DiaryPostResponse(diaryPost), HttpStatus.FOUND);
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(diaryPost), HttpStatus.FOUND);
     }
 
     /**

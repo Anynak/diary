@@ -4,6 +4,7 @@ import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User registerUser(UserRequest userRequest) {
 
-        User user = new User();
-        user.setLogin(userRequest.getLogin());
-        user.setEmail(userRequest.getEmail());
+        User user = UserMapper.INSTANCE.toUser(userRequest);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         Role role = roleRepository.findByName(ROLE_USER);
         user.addRole(role);
