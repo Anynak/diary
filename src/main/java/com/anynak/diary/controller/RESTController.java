@@ -34,25 +34,14 @@ import java.util.List;
 @Validated
 public class RESTController {
 
-
     private final UserService userService;
-    private final RoleService roleService;
     private final DiaryPostService diaryPostService;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RESTController(UserService userService, RoleService roleService, DiaryPostService diaryPostService, PasswordEncoder passwordEncoder) {
+    public RESTController(UserService userService,  DiaryPostService diaryPostService) {
         this.userService = userService;
-        this.roleService = roleService;
         this.diaryPostService = diaryPostService;
-        this.passwordEncoder = passwordEncoder;
     }
-
-    /** public information about a profile */
-    //@GetMapping("/user/{id}")
-    //public User getUser(@PathVariable Long id){
-    //    return userService.getUser(id);
-    //}
 
     /**
      * private information about the users profile
@@ -62,7 +51,6 @@ public class RESTController {
         System.out.println(principal.getName());
         User user = userService.getByLogin(principal.getName());
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user), HttpStatus.OK);
-
     }
 
     /**
@@ -77,8 +65,6 @@ public class RESTController {
             UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
-
-
     }
 
     /**
@@ -94,29 +80,22 @@ public class RESTController {
      * get all users posts
      */
     @GetMapping("/diary")
-    public ResponseEntity<List<DiaryPost>> diary(Principal principal) {
+    public ResponseEntity<List<DiaryPostResponse>> diary(Principal principal) {
         User user = userService.getByLogin(principal.getName());
-        return ResponseEntity.ok(user.getDiaryPosts());
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
     }
 
     /**
      * add post to the diary
      */
     @PostMapping("/addPost")
-    public ResponseEntity<DiaryPost> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
-        System.out.println("diaryPost");
-
-
+    public ResponseEntity<List<DiaryPostResponse>> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
         User user = userService.getByLogin(principal.getName());
-
-        DiaryPost diaryPost = new DiaryPost();
-        diaryPost.setText(diaryPostRequest.getText());
+        DiaryPost diaryPost = DiaryPostMapper.INSTANCE.toDiaryPost(diaryPostRequest);
         diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
         user.addDiaryPosts(diaryPost);
-        //System.out.println(user);
-        userService.saveUser(user);
-
-        return new ResponseEntity<>(diaryPost, HttpStatus.CREATED);
+        user = userService.saveUser(user);
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
     }
 
     /**
@@ -133,10 +112,10 @@ public class RESTController {
     /**
      * remove post
      */
-    @DeleteMapping("/post/{id}")
-    public void removePost(@PathVariable Long id) {
-        HashSet<Long> ids = new HashSet<>();
-        ids.add(id);
-        diaryPostService.removePost(ids);
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<List<DiaryPostResponse>> removePost(@PathVariable Long postId, Principal principal) {
+        User user = userService.getByLogin(principal.getName());
+        user.getDiaryPosts().removeIf(e -> e.getDiaryPostId().equals(postId));
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
     }
 }
