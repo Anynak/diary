@@ -1,9 +1,9 @@
 package com.anynak.diary.service;
 
 import com.anynak.diary.dto.UserRequest;
-import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
@@ -40,7 +40,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public User registerUser(UserRequest userRequest) {
 
-        User user = UserMapper.INSTANCE.toUser(userRequest);
+        User user = userRepository.findByEmail(userRequest.getEmail());
+        if(user!=null){
+            throw new UserAlreadyExistsException("User with email :"+userRequest.getEmail()+" already registered");
+
+        //throw new UserServiceException(new UserAlreadyExistsException("user with email" + userRequest.getEmail()+" already exists"));
+        }
+        user = UserMapper.INSTANCE.toUser(userRequest);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         Role role = roleRepository.findByName(ROLE_USER);
         user.addRole(role);
@@ -61,9 +67,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getByLogin(String login) {
-        userRepository.findByLogin(login);
-        return userRepository.findByLogin(login);
+    public User getByEmail(String email) {
+        userRepository.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override

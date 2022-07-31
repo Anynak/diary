@@ -6,25 +6,25 @@ import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.DiaryPostMapper;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.DiaryPostService;
-import com.anynak.diary.service.RoleService;
 import com.anynak.diary.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
 //TODO localisation, добить валидацию, секурица, PostService, add Mapstruct
 
@@ -38,7 +38,7 @@ public class RESTController {
     private final DiaryPostService diaryPostService;
 
     @Autowired
-    public RESTController(UserService userService,  DiaryPostService diaryPostService) {
+    public RESTController(UserService userService, DiaryPostService diaryPostService) {
         this.userService = userService;
         this.diaryPostService = diaryPostService;
     }
@@ -49,7 +49,7 @@ public class RESTController {
     @GetMapping("/profile")
     public ResponseEntity<UserResponse> profile(Principal principal) {
         System.out.println(principal.getName());
-        User user = userService.getByLogin(principal.getName());
+        User user = userService.getByEmail(principal.getName());
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user), HttpStatus.OK);
     }
 
@@ -57,13 +57,20 @@ public class RESTController {
      * create user
      */
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
+    public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
+
         if (principal != null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } else {
-            User user = userService.registerUser(userRequest);
-            UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>("you are already registered",HttpStatus.FORBIDDEN);
+        }
+        else {
+
+            //try {
+                User user = userService.registerUser(userRequest);
+                UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
+            //}catch (Exception e){
+            //    throw new UserAlreadyExistsException("User with email :"+userRequest.getEmail()+" already registered");            }
+
         }
     }
 
@@ -71,7 +78,7 @@ public class RESTController {
      * get post
      */
     @GetMapping("/post/{id}")
-    public ResponseEntity<DiaryPostResponse> getUser(@PathVariable Long id) {
+    public ResponseEntity<DiaryPostResponse> getUser(@PathVariable("id") @Min(1) Long id) {
         DiaryPost diaryPost = diaryPostService.findBuId(id);
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(diaryPost), HttpStatus.FOUND);
     }
@@ -81,7 +88,7 @@ public class RESTController {
      */
     @GetMapping("/diary")
     public ResponseEntity<List<DiaryPostResponse>> diary(Principal principal) {
-        User user = userService.getByLogin(principal.getName());
+        User user = userService.getByEmail(principal.getName());
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
     }
 
@@ -89,13 +96,13 @@ public class RESTController {
      * add post to the diary
      */
     @PostMapping("/addPost")
-    public ResponseEntity<List<DiaryPostResponse>> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
-        User user = userService.getByLogin(principal.getName());
+    public ResponseEntity<DiaryPostResponse> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
         DiaryPost diaryPost = DiaryPostMapper.INSTANCE.toDiaryPost(diaryPostRequest);
+        diaryPost.setUser(user);
         diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
-        user.addDiaryPosts(diaryPost);
-        user = userService.saveUser(user);
-        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
+        diaryPost = diaryPostService.save(diaryPost);
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(diaryPost), HttpStatus.CREATED);
     }
 
     /**
@@ -113,9 +120,10 @@ public class RESTController {
      * remove post
      */
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<List<DiaryPostResponse>> removePost(@PathVariable Long postId, Principal principal) {
-        User user = userService.getByLogin(principal.getName());
-        user.getDiaryPosts().removeIf(e -> e.getDiaryPostId().equals(postId));
-        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
+    public ResponseEntity<?> removePost(@PathVariable Long postId) {
+        if (diaryPostService.removePostById(postId) == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -12,4 +12,5 @@ import java.util.List;
 public interface DiaryPostRepository extends JpaRepository<DiaryPost, Long> {
     //@Query("FROM DiaryPost WHERE User = ?1")
     //List<DiaryPost> findByUser(User user);
+    int removeDiaryPostByDiaryPostId(Long id);
 }

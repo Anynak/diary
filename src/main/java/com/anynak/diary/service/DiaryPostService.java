@@ -12,6 +12,6 @@ public interface DiaryPostService {
     DiaryPost save(DiaryPost diaryPost);
     DiaryPost findBuId(Long id);
     List<DiaryPost> findByUser(User user);
-    void removePost(Set<Long> ids);
+    int removePostById(Long id);
 
 }

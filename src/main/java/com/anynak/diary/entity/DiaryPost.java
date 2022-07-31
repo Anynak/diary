@@ -24,10 +24,9 @@ public class DiaryPost {
     @Column(name="diary_post_id")
     private Long diaryPostId;
 
-
-    //@JoinColumn(name = "user_id")
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //private User user=null;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user=null;
 
     @Column(name="creation_UNIX_SEC")
     //@Temporal(TemporalType.TIMESTAMP)

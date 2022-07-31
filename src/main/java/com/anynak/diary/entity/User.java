@@ -26,25 +26,25 @@ public class User {
     private Long userId;
 
 
-    @OneToMany(
-            fetch = FetchType.LAZY
-            ,cascade = CascadeType.ALL
-            //,mappedBy = "user"
-    )
-    @JoinColumn(name = "user_id", nullable = false)
-    private List<DiaryPost> diaryPosts=new ArrayList<>();
+
 
     @NonNull
-    @Column(name="login", unique = true)
-    private String login;
+    @Column(name="name")
+    private String name;
 
-    @Column(name="email")
+    @Column(name="email", unique = true)
     private String email;
 
     @Column(name="password")
     private String password;
 
-
+    @OneToMany(
+            fetch = FetchType.LAZY
+            ,cascade = CascadeType.ALL
+            ,mappedBy = "user"
+    )
+    //@JoinColumn(name = "user_id", nullable = false)
+    private List<DiaryPost> diaryPosts=new ArrayList<>();
 
 
 

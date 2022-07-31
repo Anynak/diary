@@ -4,6 +4,7 @@ import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.repositories.DiaryPostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
@@ -45,7 +46,9 @@ public class DiaryPostServiceImpl implements DiaryPostService{
     }
 
     @Override
-    public void removePost(Set<Long> ids) {
-         diaryPostRepository.deleteAllById(ids);
+    @Transactional
+    public int removePostById(Long id) {
+        return diaryPostRepository.removeDiaryPostByDiaryPostId(id);
     }
+
 }

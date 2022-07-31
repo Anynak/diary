@@ -15,7 +15,7 @@ public interface UserService {
     User registerUser(UserRequest userRequest);
     User saveUser(User user);
     User getUser(Long id);
-    User getByLogin(String login);
+    User getByEmail(String login);
 
     void addRole(Role role);
 }

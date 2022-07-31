@@ -13,13 +13,13 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
-@PasswordMatch
+@PasswordMatch(message = "passwords mismatch")
 public class UserRequest {
 
     @NotNull(message = "лошара")
     @NotBlank(message = "лошара")
     @Pattern(regexp = "^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", message = "login is not correct")
-    private String login;
+    private String name;
     @NotNull(message = "лошара")
     @NotBlank(message = "лошара")
     @Email
@@ -35,7 +35,7 @@ public class UserRequest {
     @Override
     public String toString() {
         return "UserRequest{" +
-                "login='" + login + '\'' +
+                "login='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", repeatPassword='" + repeatPassword + '\'' +
