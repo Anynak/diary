@@ -13,6 +13,7 @@ import com.anynak.diary.service.DiaryPostService;
 import com.anynak.diary.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -26,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
-//TODO localisation, добить валидацию, секурица, PostService, add Mapstruct
+//TODO localisation,  секурица, PostService, add Mapstruct
 
 
 @RestController
@@ -59,6 +60,7 @@ public class RESTController {
     @PostMapping("/register")
     public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
 
+        String t;
         if (principal != null) {
             return new ResponseEntity<>("you are already registered",HttpStatus.FORBIDDEN);
         }

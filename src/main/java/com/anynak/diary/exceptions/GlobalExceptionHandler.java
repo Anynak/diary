@@ -76,10 +76,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        //System.out.println(ex.getLocalizedMessage());
         List<String> details = new ArrayList<String>();
         details = ex.getBindingResult()
-                .getFieldErrors()
+                .getAllErrors()
                 .stream()
                 .map(error -> error.getObjectName()+ " : " +error.getDefaultMessage())
                 .collect(Collectors.toList());

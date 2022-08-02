@@ -1,35 +1,36 @@
 package com.anynak.diary.dto;
-
-import com.anynak.diary.entity.User;
 import com.anynak.diary.valodator.PasswordMatch;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
+
 @Data
 @NoArgsConstructor
-@PasswordMatch(message = "passwords mismatch")
+@PasswordMatch(message = "${Different.userForm.password}")
 public class UserRequest {
 
-    @NotNull(message = "лошара")
-    @NotBlank(message = "лошара")
+    @NotNull()
+    @NotBlank()
     @Pattern(regexp = "^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", message = "login is not correct")
     private String name;
-    @NotNull(message = "лошара")
-    @NotBlank(message = "лошара")
-    @Email
+    @NotNull()
+    @NotBlank()
+    @Email()
     private String email;
-    @NotNull(message = "лошара")
-    @NotBlank(message = "лошара")
+    @NotNull()
+    @NotBlank()
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$", message = "Minimum 6 characters, at least one uppercase letter, one lowercase letter and one number")
     private String password;
-    @NotNull(message = "лошара")
-    @NotBlank(message = "лошара")
+    @NotNull()
+    @NotBlank()
     private String repeatPassword;
 
     @Override
