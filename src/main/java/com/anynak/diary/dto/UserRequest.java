@@ -14,7 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Data
 @NoArgsConstructor
-@PasswordMatch(message = "${Different.userForm.password}")
+@PasswordMatch(message = "{Different.userForm.password}")
 public class UserRequest {
 
     @NotNull()
