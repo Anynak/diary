@@ -2,10 +2,8 @@ package com.anynak.diary.dto;
 import com.anynak.diary.valodator.PasswordMatch;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+
+import javax.validation.constraints.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -14,23 +12,22 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Data
 @NoArgsConstructor
-@PasswordMatch(message = "{Different.userForm.password}")
+@PasswordMatch(message = "{userForm.password.match}")
 public class UserRequest {
 
-    @NotNull()
-    @NotBlank()
-    @Pattern(regexp = "^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", message = "login is not correct")
+    @NotNull(message = "{userForm.username.required}")
+    @NotBlank(message = "{userForm.username.required}")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]{3,15}$", message = "{userForm.username.validation}")
     private String name;
-    @NotNull()
-    @NotBlank()
-    @Email()
+    @NotNull(message = "{userForm.email.required}")
+    @NotBlank(message = "{userForm.email.required}")
+    @Email(message = "{userForm.email.validation}")
     private String email;
-    @NotNull()
-    @NotBlank()
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$", message = "Minimum 6 characters, at least one uppercase letter, one lowercase letter and one number")
+    @NotNull(message = "{userForm.password.required}")
+    @NotBlank(message = "{userForm.password.required}")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",  message = "{userForm.password.validation}")
     private String password;
-    @NotNull()
-    @NotBlank()
+
     private String repeatPassword;
 
     @Override

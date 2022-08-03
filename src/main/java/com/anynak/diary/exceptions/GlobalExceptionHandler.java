@@ -24,14 +24,16 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex){
-        List<String> details = new ArrayList<String>();
-        details.add(ex.getMessage());
+        //List<String> details = new ArrayList<String>();
+        //details.add(ex.getMessage());
 
+        List<String> messages = new ArrayList<String>();
+        messages.add(ex.getMessage());
         ApiError err = new ApiError(
                 LocalDateTime.now(),
                 HttpStatus.FORBIDDEN,
-                "Resource Not Found",
-                details);
+                "Registration Error",
+                messages,new ArrayList<>());
 
         return ResponseEntityBuilder.build(err);
     }
@@ -39,14 +41,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleResourceNotFoundException(
             ResourceNotFoundException ex) {
 
-        List<String> details = new ArrayList<String>();
-        details.add(ex.getMessage());
+        List<String> messages = new ArrayList<String>();
+        messages.add(ex.getMessage());
 
         ApiError err = new ApiError(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST,
                 "Resource Not Found",
-                details);
+                messages, new ArrayList<>());
 
         return ResponseEntityBuilder.build(err);
     }
@@ -64,7 +66,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST,
                 "Malformed JSON request" ,
-                details);
+                details,new ArrayList<>());
 
         return ResponseEntityBuilder.build(err);
     }
@@ -76,128 +78,129 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        List<String> details = new ArrayList<String>();
-        details = ex.getBindingResult()
+        List<String> messages = new ArrayList<String>();
+        System.out.println(ex.getAllErrors());
+        messages = ex.getBindingResult()
                 .getAllErrors()
                 .stream()
-                .map(error -> error.getObjectName()+ " : " +error.getDefaultMessage())
+                .map(error -> ""+error.getDefaultMessage())
                 .collect(Collectors.toList());
 ////
         ApiError err = new ApiError(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST,
-                "Validation Errors" ,
-                details);
+                "Validation Error" ,
+                messages,new ArrayList<>());
 ////
         return ResponseEntityBuilder.build(err);
     }
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-            MethodArgumentTypeMismatchException ex,
-            WebRequest request) {
-
-        List<String> details = new ArrayList<String>();
-        details.add(ex.getMessage());
-
-        ApiError err = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
-                "Type Mismatch" ,
-                details);
-
-        return ResponseEntityBuilder.build(err);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> handleConstraintViolationException(
-            Exception ex,
-            WebRequest request) {
-
-        List<String> details = new ArrayList<String>();
-        details.add(ex.getMessage());
-
-        ApiError err = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
-                "Constraint Violations" ,
-                details);
-
-        return ResponseEntityBuilder.build(err);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMissingServletRequestParameter(
-            MissingServletRequestParameterException ex, HttpHeaders headers,
-            HttpStatus status, WebRequest request) {
-
-        List<String> details = new ArrayList<String>();
-        details.add(ex.getParameterName() + " parameter is missing");
-
-        ApiError err = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
-                "Missing Parameters" ,
-                details);
-
-        return ResponseEntityBuilder.build(err);
-    }
-    @Override
-    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
-            HttpMediaTypeNotSupportedException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
-
-        List<String> details = new ArrayList<String>();
-        StringBuilder builder = new StringBuilder();
-        builder.append(ex.getContentType());
-        builder.append(" media type is not supported. Supported media types are ");
-        ex.getSupportedMediaTypes().forEach(t -> builder.append(t).append(", "));
-
-        details.add(builder.toString());
-
-        ApiError err = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                "Unsupported Media Type" ,
-                details);
-
-        return ResponseEntityBuilder.build(err);
-    }
-    @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(
-            NoHandlerFoundException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
-
-        List<String> details = new ArrayList<String>();
-        details.add(String.format("Could not find the %s method for URL %s", ex.getHttpMethod(), ex.getRequestURL()));
-
-        ApiError err = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND,
-                "Method Not Found" ,
-                details);
-
-        return ResponseEntityBuilder.build(err);
-
-    }
-    @ExceptionHandler({ Exception.class })
-    public ResponseEntity<Object> handleAll(
-            Exception ex,
-            WebRequest request) {
-
-        List<String> details = new ArrayList<String>();
-        details.add(ex.getLocalizedMessage());
-
-        ApiError err = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
-                "Error occurred" ,
-                details);
-
-        return ResponseEntityBuilder.build(err);
-    }
+    //@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    //protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+    //        MethodArgumentTypeMismatchException ex,
+    //        WebRequest request) {
+//
+    //    List<String> details = new ArrayList<String>();
+    //    details.add(ex.getMessage());
+//
+    //    ApiError err = new ApiError(
+    //            LocalDateTime.now(),
+    //            HttpStatus.BAD_REQUEST,
+    //            "Type Mismatch" ,
+    //            details);
+//
+    //    return ResponseEntityBuilder.build(err);
+    //}
+//
+    //@ExceptionHandler(ConstraintViolationException.class)
+    //public ResponseEntity<?> handleConstraintViolationException(
+    //        Exception ex,
+    //        WebRequest request) {
+//
+    //    List<String> details = new ArrayList<String>();
+    //    details.add(ex.getMessage());
+//
+    //    ApiError err = new ApiError(
+    //            LocalDateTime.now(),
+    //            HttpStatus.BAD_REQUEST,
+    //            "Constraint Violations" ,
+    //            details);
+//
+    //    return ResponseEntityBuilder.build(err);
+    //}
+//
+    //@Override
+    //protected ResponseEntity<Object> handleMissingServletRequestParameter(
+    //        MissingServletRequestParameterException ex, HttpHeaders headers,
+    //        HttpStatus status, WebRequest request) {
+//
+    //    List<String> details = new ArrayList<String>();
+    //    details.add(ex.getParameterName() + " parameter is missing");
+//
+    //    ApiError err = new ApiError(
+    //            LocalDateTime.now(),
+    //            HttpStatus.BAD_REQUEST,
+    //            "Missing Parameters" ,
+    //            details);
+//
+    //    return ResponseEntityBuilder.build(err);
+    //}
+    //@Override
+    //protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
+    //        HttpMediaTypeNotSupportedException ex,
+    //        HttpHeaders headers,
+    //        HttpStatus status,
+    //        WebRequest request) {
+//
+    //    List<String> details = new ArrayList<String>();
+    //    StringBuilder builder = new StringBuilder();
+    //    builder.append(ex.getContentType());
+    //    builder.append(" media type is not supported. Supported media types are ");
+    //    ex.getSupportedMediaTypes().forEach(t -> builder.append(t).append(", "));
+//
+    //    details.add(builder.toString());
+//
+    //    ApiError err = new ApiError(
+    //            LocalDateTime.now(),
+    //            HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+    //            "Unsupported Media Type" ,
+    //            details);
+//
+    //    return ResponseEntityBuilder.build(err);
+    //}
+    //@Override
+    //protected ResponseEntity<Object> handleNoHandlerFoundException(
+    //        NoHandlerFoundException ex,
+    //        HttpHeaders headers,
+    //        HttpStatus status,
+    //        WebRequest request) {
+//
+    //    List<String> details = new ArrayList<String>();
+    //    details.add(String.format("Could not find the %s method for URL %s", ex.getHttpMethod(), ex.getRequestURL()));
+//
+    //    ApiError err = new ApiError(
+    //            LocalDateTime.now(),
+    //            HttpStatus.NOT_FOUND,
+    //            "Method Not Found" ,
+    //            details);
+//
+    //    return ResponseEntityBuilder.build(err);
+//
+    //}
+    //@ExceptionHandler({ Exception.class })
+    //public ResponseEntity<Object> handleAll(
+    //        Exception ex,
+    //        WebRequest request) {
+//
+    //    List<String> details = new ArrayList<String>();
+    //    details.add(ex.getLocalizedMessage());
+//
+    //    ApiError err = new ApiError(
+    //            LocalDateTime.now(),
+    //            HttpStatus.BAD_REQUEST,
+    //            "Error occurred" ,
+    //            details);
+//
+    //    return ResponseEntityBuilder.build(err);
+    //}
 
 }

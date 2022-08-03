@@ -8,6 +8,7 @@ import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,8 @@ public class UserServiceImpl implements UserService{
 
         User user = userRepository.findByEmail(userRequest.getEmail());
         if(user!=null){
-            throw new UserAlreadyExistsException("User with email :"+userRequest.getEmail()+" already registered");
+
+            throw new UserAlreadyExistsException("User with email: "+userRequest.getEmail()+" already registered");
 
         //throw new UserServiceException(new UserAlreadyExistsException("user with email" + userRequest.getEmail()+" already exists"));
         }
