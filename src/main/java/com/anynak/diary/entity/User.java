@@ -1,6 +1,5 @@
 package com.anynak.diary.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,66 +9,61 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//@Data
 @RequiredArgsConstructor
 @Entity
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@Table(name="user")
+@Table(name = "user")
 public class User {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long userId;
 
 
-
-
     @NonNull
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="email", unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
     @OneToMany(
             fetch = FetchType.LAZY
-            ,cascade = CascadeType.ALL
-            ,mappedBy = "user"
+            , cascade = CascadeType.ALL
+            , mappedBy = "user"
     )
-    //@JoinColumn(name = "user_id", nullable = false)
-    private List<DiaryPost> diaryPosts=new ArrayList<>();
+    private List<DiaryPost> diaryPosts = new ArrayList<>();
 
-
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private Set<Role> roles=null;
+    private Set<Role> roles = null;
 
-    public void addRole(Role role){
-        if(roles==null){
+    public void addRole(Role role) {
+        if (roles == null) {
             roles = new HashSet<>();
         }
         this.roles.add(role);
     }
 
-    public void addDiaryPosts(DiaryPost diaryPost){
-        if(diaryPosts==null){
+    public void addDiaryPosts(DiaryPost diaryPost) {
+        if (diaryPosts == null) {
             diaryPosts = new ArrayList<>();
         }
         this.diaryPosts.add(diaryPost);
     }
-    public void removeRole(Role role){
+
+    public void removeRole(Role role) {
         this.roles.remove(role);
     }
 }

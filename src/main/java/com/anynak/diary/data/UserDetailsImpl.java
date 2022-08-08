@@ -1,16 +1,12 @@
 package com.anynak.diary.data;
 
-import antlr.StringUtils;
-import com.anynak.diary.RoleName;
 import com.anynak.diary.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
@@ -27,7 +23,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authority = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());
-        System.out.println("UserDetailsImpl "+authority);
+        System.out.println("UserDetailsImpl " + authority);
 
     }
 

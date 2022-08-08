@@ -11,7 +11,10 @@ import java.util.List;
 @Mapper
 public interface DiaryPostMapper {
     DiaryPostMapper INSTANCE = Mappers.getMapper(DiaryPostMapper.class);
+
     DiaryPostResponse toDiaryPostResponse(DiaryPost diaryPost);
+
     List<DiaryPostResponse> toDiaryPostResponse(List<DiaryPost> diaryPost);
+
     DiaryPost toDiaryPost(DiaryPostRequest diaryPostRequest);
 }

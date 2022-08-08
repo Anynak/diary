@@ -1,6 +1,5 @@
 package com.anynak.diary.dto;
 
-import com.anynak.diary.entity.DiaryPost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

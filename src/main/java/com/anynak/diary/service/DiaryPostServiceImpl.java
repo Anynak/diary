@@ -1,36 +1,32 @@
 package com.anynak.diary.service;
 
 import com.anynak.diary.entity.DiaryPost;
-import com.anynak.diary.entity.User;
+
 import com.anynak.diary.repositories.DiaryPostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+
 
 @Service
-public class DiaryPostServiceImpl implements DiaryPostService{
+public class DiaryPostServiceImpl implements DiaryPostService {
     private final DiaryPostRepository diaryPostRepository;
-    private final UserService userService;
-    public DiaryPostServiceImpl(DiaryPostRepository diaryPostRepository, UserService userService) {
+
+
+    public DiaryPostServiceImpl(DiaryPostRepository diaryPostRepository) {
         this.diaryPostRepository = diaryPostRepository;
-        this.userService = userService;
+
     }
 
     @Override
     public DiaryPost addBuUserName(DiaryPost diaryPost, String userName) {
-        //User user = userService.getByLogin(userName);
-        //diaryPost.setUser(user);
         diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
         return diaryPostRepository.save(diaryPost);
     }
 
     @Override
     public DiaryPost save(DiaryPost diaryPost) {
-
         return diaryPostRepository.save(diaryPost);
 
     }
@@ -40,10 +36,6 @@ public class DiaryPostServiceImpl implements DiaryPostService{
         return diaryPostRepository.getReferenceById(id);
     }
 
-    @Override
-    public List<DiaryPost> findByUser(User user) {
-        return null;
-    }
 
     @Override
     @Transactional

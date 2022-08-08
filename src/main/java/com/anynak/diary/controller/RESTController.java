@@ -6,14 +6,12 @@ import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
-import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.DiaryPostMapper;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.DiaryPostService;
 import com.anynak.diary.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
@@ -56,23 +53,23 @@ public class RESTController {
 
     /**
      * create user
+     * ex body:
+     * {
+     *     "name": "Max",
+     *     "email": "MaxPlanck@mail.com",
+     *     "password":"Qwerty123",
+     *     "repeatPassword":"Qwerty123"
+     * }
      */
     @PostMapping("/register")
     public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
 
-        String t;
         if (principal != null) {
-            return new ResponseEntity<>("you are already registered",HttpStatus.FORBIDDEN);
-        }
-        else {
-
-            //try {
-                User user = userService.registerUser(userRequest);
-                UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
-                return new ResponseEntity<>(response, HttpStatus.CREATED);
-            //}catch (Exception e){
-            //    throw new UserAlreadyExistsException("User with email :"+userRequest.getEmail()+" already registered");            }
-
+            return new ResponseEntity<>("you are already registered", HttpStatus.FORBIDDEN);
+        } else {
+            User user = userService.registerUser(userRequest);
+            UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
     }
 
@@ -96,6 +93,10 @@ public class RESTController {
 
     /**
      * add post to the diary
+     * ex body:
+     * {
+     *     "text": "text"
+     * }
      */
     @PostMapping("/addPost")
     public ResponseEntity<DiaryPostResponse> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
@@ -110,13 +111,16 @@ public class RESTController {
     /**
      * edit post
      */
-    @PutMapping("/post")
-    public ResponseEntity<DiaryPost> editPost(@RequestBody DiaryPost diaryPost, Principal principal) {
-        DiaryPost updatedPost = diaryPostService.addBuUserName(diaryPost, principal.getName());
-        return ResponseEntity.ok(updatedPost);
-    }
+    //@PutMapping("/post")
+    //public ResponseEntity<DiaryPostResponse> editPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
+    //    System.out.println(diaryPostRequest);
+    //    DiaryPost diaryPost = diaryPostService.findBuId(diaryPostRequest.getDiaryPostId());
+    //    diaryPost.setText(diaryPostRequest.getText());
+    //    DiaryPost updatedPost = diaryPostService.save(diaryPost);
+    //    return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
+    //}
 
-    /** get strange post*/
+    /** get stranger post*/
 
     /**
      * remove post

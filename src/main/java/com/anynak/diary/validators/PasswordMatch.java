@@ -1,8 +1,7 @@
-package com.anynak.diary.valodator;
+package com.anynak.diary.validators;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import javax.validation.constraints.NotBlank;
 import java.lang.annotation.*;
 
 @Target(ElementType.TYPE)

@@ -1,4 +1,4 @@
-package com.anynak.diary.valodator;
+package com.anynak.diary.validators;
 
 import com.anynak.diary.dto.UserRequest;
 
@@ -13,6 +13,7 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
 
     @Override
     public boolean isValid(UserRequest userRequest, ConstraintValidatorContext context) {
+        if(userRequest.getPassword()==null || userRequest.getPassword().isBlank()){return false;}
         return userRequest.getPassword().equals(userRequest.getRepeatPassword());
     }
 }

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +27,20 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    //ResourceBundle labels = ResourceBundle.getBundle("validation.properties");
-    private Locale loc = LocaleContextHolder.getLocale();
+    private final Locale loc = LocaleContextHolder.getLocale();
 
     @Autowired
-    private MessageSource messageSource;
+    GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    private final MessageSource messageSource;
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
-        List<String> details = new ArrayList<String>();
+        List<String> details = new ArrayList<>();
 
-        List<String> messages = new ArrayList<String>();
+        List<String> messages = new ArrayList<>();
 
         messages.add(messageSource.getMessage("userForm.alreadyExists", null, loc));
         details.add(ex.getMessage());
@@ -94,28 +96,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    //@ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
         List<String> details = new ArrayList<>();
-        List<String> messages = new ArrayList<>();
+        List<String> messages;
         System.out.println(ex.getAllErrors());
         messages = ex.getBindingResult()
                 .getAllErrors()
                 .stream()
                 .map(error -> "" + error.getDefaultMessage())
                 .collect(Collectors.toList());
-////
+
         ApiError err = new ApiError(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST,
                 "Validation Error",
                 details,
                 messages);
-////
+
         return ResponseEntityBuilder.build(err);
     }
 
@@ -140,8 +141,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-            MethodArgumentTypeMismatchException ex,
-            WebRequest request) {
+            MethodArgumentTypeMismatchException ex) {
         List<String> messages = new ArrayList<>();
         messages.add(messageSource.getMessage("request.bad", null, loc));
 
@@ -159,8 +159,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     //
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handleConstraintViolationException(
-            Exception ex,
-            WebRequest request) {
+            Exception ex) {
         List<String> messages = new ArrayList<>();
         messages.add(messageSource.getMessage("form.input.wrongConstraint", null, loc));
         List<String> details = new ArrayList<>();
@@ -248,8 +247,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAll(
-            Exception ex,
-            WebRequest request) {
+            Exception ex) {
 
         ex.printStackTrace();
         List<String> details = new ArrayList<>();

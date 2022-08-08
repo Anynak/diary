@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Data
 @Entity
@@ -25,7 +24,10 @@ public class Role {
         this.roleName = roleName;
 
     }
-    public Role() { }
+
+    public Role() {
+    }
+
     @Override
     public String toString() {
         return roleName.toString();
