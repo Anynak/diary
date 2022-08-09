@@ -1,6 +1,5 @@
 package com.anynak.diary.entity;
 
-import com.anynak.diary.RoleName;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

@@ -1,4 +1,4 @@
-package com.anynak.diary.data;
+package com.anynak.diary.config.security.data;
 
 import com.anynak.diary.entity.User;
 import org.springframework.security.core.GrantedAuthority;

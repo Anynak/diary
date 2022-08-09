@@ -1,6 +1,6 @@
 package com.anynak.diary.config.security;
 
-import com.anynak.diary.data.UserDetailsServiceImpl;
+import com.anynak.diary.config.security.data.UserDetailsServiceImpl;
 import com.anynak.diary.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

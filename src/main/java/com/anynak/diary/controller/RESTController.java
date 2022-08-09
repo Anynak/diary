@@ -126,7 +126,7 @@ public class RESTController {
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
     }
 
-    //TODO et stranger post
+    //TODO get stranger post
     /**
      * remove post
      */

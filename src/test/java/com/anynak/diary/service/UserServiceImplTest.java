@@ -1,8 +1,5 @@
 package com.anynak.diary.service;
 
-import com.anynak.diary.RoleName;
-import com.anynak.diary.entity.Role;
-import com.anynak.diary.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

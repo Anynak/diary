@@ -1,6 +1,6 @@
 package com.anynak.diary.service;
 
-import com.anynak.diary.RoleName;
+import com.anynak.diary.entity.RoleName;
 import com.anynak.diary.entity.Role;
 
 public interface RoleService {

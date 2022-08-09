@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.anynak.diary.RoleName.ROLE_USER;
+import static com.anynak.diary.entity.RoleName.ROLE_USER;
 
 
 @Service
