@@ -55,10 +55,10 @@ public class RESTController {
      * create user
      * ex body:
      * {
-     *     "name": "Max",
-     *     "email": "MaxPlanck@mail.com",
-     *     "password":"Qwerty123",
-     *     "repeatPassword":"Qwerty123"
+     * "name": "Max",
+     * "email": "MaxPlanck@mail.com",
+     * "password":"Qwerty123",
+     * "repeatPassword":"Qwerty123"
      * }
      */
     @PostMapping("/register")
@@ -77,8 +77,9 @@ public class RESTController {
      * get post
      */
     @GetMapping("/post/{id}")
-    public ResponseEntity<DiaryPostResponse> getUser(@PathVariable("id") @Min(1) Long id) {
-        DiaryPost diaryPost = diaryPostService.findBuId(id);
+    public ResponseEntity<DiaryPostResponse> getUser(@PathVariable("id") @Min(1) Long id, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        DiaryPost diaryPost = diaryPostService.findBuIdAndUser(id, user);
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(diaryPost), HttpStatus.FOUND);
     }
 
@@ -95,7 +96,7 @@ public class RESTController {
      * add post to the diary
      * ex body:
      * {
-     *     "text": "text"
+     * "text": "text"
      * }
      */
     @PostMapping("/addPost")
@@ -110,24 +111,29 @@ public class RESTController {
 
     /**
      * edit post
+     * ex body:
+     * {
+     * "diaryPostId": 22,
+     * "text": "edited text"
+     * }
      */
-    //@PutMapping("/post")
-    //public ResponseEntity<DiaryPostResponse> editPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
-    //    System.out.println(diaryPostRequest);
-    //    DiaryPost diaryPost = diaryPostService.findBuId(diaryPostRequest.getDiaryPostId());
-    //    diaryPost.setText(diaryPostRequest.getText());
-    //    DiaryPost updatedPost = diaryPostService.save(diaryPost);
-    //    return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
-    //}
+    @PutMapping("/post")
+    public ResponseEntity<DiaryPostResponse> editPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        DiaryPost diaryPost = diaryPostService.findBuIdAndUser(diaryPostRequest.getDiaryPostId(), user);
+        diaryPost.setText(diaryPostRequest.getText());
+        DiaryPost updatedPost = diaryPostService.save(diaryPost);
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
+    }
 
-    /** get stranger post*/
-
+    //TODO et stranger post
     /**
      * remove post
      */
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<?> removePost(@PathVariable Long postId) {
-        if (diaryPostService.removePostById(postId) == 0) {
+    public ResponseEntity<?> removePost(@PathVariable Long postId, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        if (diaryPostService.removePostByIdAndUser(postId, user) == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);

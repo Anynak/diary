@@ -3,6 +3,7 @@ package com.anynak.diary.service;
 import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
+import com.anynak.diary.exceptions.ResourceNotFoundException;
 import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.repositories.RoleRepository;
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isPresent()) {
             return optionalUser.get();
         } else {
-            throw new RuntimeException("no such user with id: " + id);
+            throw new ResourceNotFoundException("no such user with id: " + id);
         }
     }
 

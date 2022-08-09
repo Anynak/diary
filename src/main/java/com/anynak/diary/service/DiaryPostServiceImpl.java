@@ -2,11 +2,14 @@ package com.anynak.diary.service;
 
 import com.anynak.diary.entity.DiaryPost;
 
+import com.anynak.diary.entity.User;
+import com.anynak.diary.exceptions.ResourceNotFoundException;
 import com.anynak.diary.repositories.DiaryPostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 
 
 @Service
@@ -19,11 +22,6 @@ public class DiaryPostServiceImpl implements DiaryPostService {
 
     }
 
-    @Override
-    public DiaryPost addBuUserName(DiaryPost diaryPost, String userName) {
-        diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
-        return diaryPostRepository.save(diaryPost);
-    }
 
     @Override
     public DiaryPost save(DiaryPost diaryPost) {
@@ -32,15 +30,20 @@ public class DiaryPostServiceImpl implements DiaryPostService {
     }
 
     @Override
-    public DiaryPost findBuId(Long id) {
-        return diaryPostRepository.getReferenceById(id);
+    public DiaryPost findBuIdAndUser(Long postId, User user) {
+        Optional<DiaryPost> optionalDiaryPost = diaryPostRepository.getDiaryPostByDiaryPostIdAndUser(postId, user);
+        if (optionalDiaryPost.isPresent()) {
+            return optionalDiaryPost.get();
+        } else {
+            throw new ResourceNotFoundException("post with id: " + postId + " and user: " + user.getEmail() + " not found");
+        }
     }
 
 
     @Override
     @Transactional
-    public int removePostById(Long id) {
-        return diaryPostRepository.removeDiaryPostByDiaryPostId(id);
+    public int removePostByIdAndUser(Long diaryPostId, User user) {
+        return diaryPostRepository.removeDiaryPostByDiaryPostIdAndUser(diaryPostId, user);
     }
 
 }

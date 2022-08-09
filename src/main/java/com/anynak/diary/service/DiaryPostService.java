@@ -1,14 +1,14 @@
 package com.anynak.diary.service;
 
 import com.anynak.diary.entity.DiaryPost;
+import com.anynak.diary.entity.User;
 
 public interface DiaryPostService {
-    DiaryPost addBuUserName(DiaryPost diaryPost, String userName);
 
     DiaryPost save(DiaryPost diaryPost);
 
-    DiaryPost findBuId(Long id);
+    DiaryPost findBuIdAndUser(Long postId, User user);
 
-    int removePostById(Long id);
+    int removePostByIdAndUser(Long diaryPostId, User user);
 
 }
