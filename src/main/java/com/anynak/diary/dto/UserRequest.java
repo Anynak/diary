@@ -27,14 +27,4 @@ public class UserRequest {
     private String password;
 
     private String repeatPassword;
-
-    @Override
-    public String toString() {
-        return "UserRequest{" +
-                "login='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", repeatPassword='" + repeatPassword + '\'' +
-                '}';
-    }
 }

@@ -3,15 +3,12 @@ package com.anynak.diary.service;
 import com.anynak.diary.entity.RoleName;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.repositories.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+@RequiredArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
-
-    public RoleServiceImpl(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public void createNewRole(Role role) {
@@ -25,6 +22,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleByName(RoleName roleName) {
-        return roleRepository.findByName(roleName);
+        return roleRepository.findRoleByRoleName(roleName);
     }
 }

@@ -2,6 +2,7 @@ package com.anynak.diary.entity;
 
 import lombok.Data;
 
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 
@@ -11,11 +12,9 @@ import javax.persistence.*;
 @Data
 @Entity
 @SuperBuilder
+@NoArgsConstructor
 @Table(name = "diary_post")
 public class DiaryPost {
-    public DiaryPost() {
-
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

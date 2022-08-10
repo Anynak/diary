@@ -8,7 +8,7 @@ import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static com.anynak.diary.entity.RoleName.ROLE_USER;
 
-
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,32 +26,23 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-
-    @Autowired
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository) {
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
-
     @Override
     public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        return userRepository.getAllUsers().orElseThrow(() -> new ResourceNotFoundException("no users registered"));
     }
 
     @Override
     public User registerUser(UserRequest userRequest) {
 
-        User user = userRepository.findByEmail(userRequest.getEmail());
-        if (user != null) {
-
+        Optional<User> user = userRepository.findByEmail(userRequest.getEmail());
+        if (user.isPresent()) {
             throw new UserAlreadyExistsException("User with email: " + userRequest.getEmail() + " already registered");
         }
-        user = UserMapper.INSTANCE.toUser(userRequest);
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        Role role = roleRepository.findByName(ROLE_USER);
-        user.addRole(role);
-        return userRepository.save(user);
+        User newUser = UserMapper.INSTANCE.toUser(userRequest);
+        newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        Role role = roleRepository.findRoleByRoleName(ROLE_USER);
+        newUser.addRole(role);
+        return userRepository.save(newUser);
     }
 
     @Override
@@ -71,8 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) {
-        userRepository.findByEmail(email);
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("no such user with email: " + email));
     }
 
     @Override

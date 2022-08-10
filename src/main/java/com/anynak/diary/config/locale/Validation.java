@@ -1,17 +1,13 @@
 package com.anynak.diary.config.locale;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+@RequiredArgsConstructor
 @Configuration
 public class Validation {
-    @Autowired
-    Validation(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
     private final MessageSource messageSource;
     @Bean
     public LocalValidatorFactoryBean getValidator(){

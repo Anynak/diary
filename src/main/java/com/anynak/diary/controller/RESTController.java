@@ -64,6 +64,7 @@ public class RESTController {
     @PostMapping("/register")
     public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
 
+        System.out.println(userRequest);
         if (principal != null) {
             return new ResponseEntity<>("you are already registered", HttpStatus.FORBIDDEN);
         } else {
