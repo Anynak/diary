@@ -47,20 +47,10 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-    private Set<Role> roles = null;
+    private Set<Role> roles = new HashSet<>();
 
     public void addRole(Role role) {
-        if (roles == null) {
-            roles = new HashSet<>();
-        }
         this.roles.add(role);
-    }
-
-    public void addDiaryPosts(DiaryPost diaryPost) {
-        if (diaryPosts == null) {
-            diaryPosts = new ArrayList<>();
-        }
-        this.diaryPosts.add(diaryPost);
     }
 
     public void removeRole(Role role) {

@@ -1,21 +1,15 @@
-package com.anynak.diary.controller;
+package com.anynak.diary.controllers;
 
 import com.anynak.diary.dto.DiaryPostRequest;
 import com.anynak.diary.dto.DiaryPostResponse;
-import com.anynak.diary.dto.UserRequest;
-import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.mapers.DiaryPostMapper;
-import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.DiaryPostService;
 import com.anynak.diary.service.UserService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,55 +18,14 @@ import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
-//TODO localisation,  секурица, PostService, add Mapstruct
-
 
 @RestController
 @RequestMapping("/api")
 @Validated
-public class RESTController {
-
-    private final UserService userService;
+@RequiredArgsConstructor
+public class DiaryPostController {
     private final DiaryPostService diaryPostService;
-
-    @Autowired
-    public RESTController(UserService userService, DiaryPostService diaryPostService) {
-        this.userService = userService;
-        this.diaryPostService = diaryPostService;
-    }
-
-    /**
-     * private information about the users profile
-     */
-    @GetMapping("/profile")
-    public ResponseEntity<UserResponse> profile(Principal principal) {
-        System.out.println(principal.getName());
-        User user = userService.getByEmail(principal.getName());
-        return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user), HttpStatus.OK);
-    }
-
-    /**
-     * create user
-     * ex body:
-     * {
-     * "name": "Max",
-     * "email": "MaxPlanck@mail.com",
-     * "password":"Qwerty123",
-     * "repeatPassword":"Qwerty123"
-     * }
-     */
-    @PostMapping("/register")
-    public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
-
-        System.out.println(userRequest);
-        if (principal != null) {
-            return new ResponseEntity<>("you are already registered", HttpStatus.FORBIDDEN);
-        } else {
-            User user = userService.registerUser(userRequest);
-            UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }
-    }
+    private final UserService userService;
 
     /**
      * get post
@@ -126,8 +79,8 @@ public class RESTController {
         DiaryPost updatedPost = diaryPostService.save(diaryPost);
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
     }
-
     //TODO get stranger post
+
     /**
      * remove post
      */
