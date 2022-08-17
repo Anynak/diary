@@ -1,5 +1,6 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.dto.RoleRequest;
 import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.User;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.anynak.diary.entity.RoleName.ROLE_USER;
 
@@ -34,8 +36,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(UserRequest userRequest) {
 
-        Optional<User> user = userRepository.findByEmail(userRequest.getEmail());
-        if (user.isPresent()) {
+        Optional<User> optionalUser = userRepository.findByEmail(userRequest.getEmail());
+        if (optionalUser.isPresent()) {
             throw new UserAlreadyExistsException("User with email: " + userRequest.getEmail() + " already registered");
         }
         User newUser = UserMapper.INSTANCE.toUser(userRequest);
@@ -68,5 +70,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addRole(Role role) {
 
+    }
+
+    @Override
+    public User setRoles(RoleRequest roleRequest) {
+
+        Optional<User> optionalUser = userRepository.findById(roleRequest.getUserId());
+        if(optionalUser.isEmpty()) throw new ResourceNotFoundException("no such user with id: " + roleRequest.getUserId());
+        User user = optionalUser.get();
+        System.out.println("111 "+user);
+        Set<Role> roles = roleRepository.findAllByRoleNameIn(roleRequest.getRoles());
+        System.out.println("RRep "+roles );
+        user.setRoles(roles);
+        System.out.println(user);
+        return userRepository.save(user);
     }
 }

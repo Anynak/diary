@@ -27,8 +27,6 @@ public class Role {
     public Role() {
     }
 
-    @Override
-    public String toString() {
-        return roleName.toString();
-    }
+
+
 }

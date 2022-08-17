@@ -23,6 +23,8 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "active")
+    private boolean active;
 
     @NonNull
     @Column(name = "name")
@@ -41,7 +43,7 @@ public class User {
     )
     private List<DiaryPost> diaryPosts = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -55,5 +57,17 @@ public class User {
 
     public void removeRole(Role role) {
         this.roles.remove(role);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", active=" + active +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

@@ -31,4 +31,13 @@ public class DiaryPost {
 
     @Column(name = "text")
     private String text;
+
+    @Override
+    public String toString() {
+        return "DiaryPost{" +
+                "diaryPostId=" + diaryPostId +
+                ", creation_UNIX_SEC=" + creation_UNIX_SEC +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

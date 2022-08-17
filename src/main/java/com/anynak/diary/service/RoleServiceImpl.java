@@ -5,6 +5,10 @@ import com.anynak.diary.entity.Role;
 import com.anynak.diary.repositories.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+
 @RequiredArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -21,7 +25,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role getRoleByName(RoleName roleName) {
-        return roleRepository.findRoleByRoleName(roleName);
+    public Set<Role> findRolesByName(Set<RoleName> roleNames) {
+        return roleRepository.findAllByRoleNameIn(roleNames);
     }
+
+
 }

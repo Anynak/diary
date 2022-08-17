@@ -1,5 +1,6 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.dto.RoleRequest;
 import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.Role;
@@ -9,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<User> getAllUsers();
@@ -18,4 +20,6 @@ public interface UserService {
     User getByEmail(String login);
 
     void addRole(Role role);
+
+    User setRoles(RoleRequest roleRequest);
 }

@@ -1,5 +1,6 @@
 package com.anynak.diary.controllers;
 
+import com.anynak.diary.dto.RoleRequest;
 import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.User;
@@ -28,8 +29,9 @@ public class UserController {
      */
     @GetMapping("/profile")
     public ResponseEntity<UserResponse> profile(Principal principal) {
-        System.out.println(principal.getName());
+        //System.out.println(principal);
         User user = userService.getByEmail(principal.getName());
+        System.out.println(user);
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user), HttpStatus.OK);
     }
 
@@ -54,4 +56,10 @@ public class UserController {
         }
     }
 
+    @PostMapping("/setRoles")
+    public ResponseEntity<Object> setRoles(@RequestBody @Valid RoleRequest roleRequest, Principal principal){
+        System.out.println(roleRequest);
+        User user= userService.setRoles(roleRequest);
+        return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
+    }
 }

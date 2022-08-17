@@ -14,12 +14,13 @@ public class UserDetailsImpl implements UserDetails {
     private final String userName;
     private final String password;
     private final boolean active;
-    private List<GrantedAuthority> authority;
+    private final List<GrantedAuthority> authority;
 
     public UserDetailsImpl(User user) {
+        System.out.println("UserDetailsImpl "+ user);
         this.userName = user.getEmail();
         this.password = user.getPassword();
-        this.active = true;
+        this.active = user.isActive();
         this.authority = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());
