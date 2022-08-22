@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.security.Principal;
 
 @RestController
@@ -54,6 +55,7 @@ public class UserController {
         }
     }
     /**
+     * only ROLE_ADMIN can patch roles
      * ex body:
      * {
      *  "userId": 15,
@@ -63,9 +65,18 @@ public class UserController {
      *      ]
      * }
      */
-    @PostMapping("/setRoles")
+    @PatchMapping("/setRoles")
     public ResponseEntity<Object> setRoles(@RequestBody @Valid RoleRequest roleRequest, Principal principal){
+        System.out.println(principal);
         User user= userService.setRoles(roleRequest);
+        return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
+    }
+    /**
+     * only ROLE_ADMIN and ROLE_MODERATOR can ban
+     * */
+    @PatchMapping("/banUser/{id}")
+    public ResponseEntity<Object> banUser(@PathVariable("id") @Min(1) Long id, Principal principal){
+        User user = userService.banUser(id);
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
     }
 }

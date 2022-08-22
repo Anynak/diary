@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.anynak.diary.entity.RoleName.ROLE_BANNED;
 import static com.anynak.diary.entity.RoleName.ROLE_USER;
 
 @RequiredArgsConstructor
@@ -68,18 +69,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRole(Role role) {
+    public User banUser(Long id) {
+        User user = getUser(id);
+        Role role = roleRepository.findRoleByRoleName(ROLE_BANNED);
+        user.addRole(role);
+        return userRepository.save(user);
 
     }
 
     @Override
     public User setRoles(RoleRequest roleRequest) {
-
-        Optional<User> optionalUser = userRepository.findById(roleRequest.getUserId());
-        if(optionalUser.isEmpty()) {
-            throw new ResourceNotFoundException("no such user with id: " + roleRequest.getUserId());
-        }
-        User user = optionalUser.get();
+        User user = getUser(roleRequest.getUserId());
         Set<Role> roles = roleRepository.findAllByRoleNameIn(roleRequest.getRoles());
         user.setRoles(roles);
         return userRepository.save(user);

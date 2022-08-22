@@ -19,7 +19,7 @@ public interface UserService {
     User getUser(Long id);
     User getByEmail(String login);
 
-    void addRole(Role role);
+    User banUser(Long id);
 
     User setRoles(RoleRequest roleRequest);
 }
