@@ -53,7 +53,7 @@ public class DiaryPostController {
      * "text": "text"
      * }
      */
-    @PostMapping("/addPost")
+    @PostMapping("/newPost")
     public ResponseEntity<DiaryPostResponse> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
         User user = userService.getByEmail(principal.getName());
         DiaryPost diaryPost = DiaryPostMapper.INSTANCE.toDiaryPost(diaryPostRequest);
@@ -64,14 +64,14 @@ public class DiaryPostController {
     }
 
     /**
-     * edit post
+     * edit post text
      * ex body:
      * {
      * "diaryPostId": 22,
      * "text": "edited text"
      * }
      */
-    @PutMapping("/post")
+    @PatchMapping("/post")
     public ResponseEntity<DiaryPostResponse> editPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
         User user = userService.getByEmail(principal.getName());
         DiaryPost diaryPost = diaryPostService.findBuIdAndUser(diaryPostRequest.getDiaryPostId(), user);

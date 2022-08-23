@@ -14,6 +14,7 @@ public class UserResponse {
     private Long userId;
     private String name;
     private String email;
-    private Set<Role> roles = new HashSet<>();
+    private boolean publicDiary;
+    private Set<RoleResponse> roles = new HashSet<>();
 
 }

@@ -2,6 +2,7 @@ package com.anynak.diary.entity;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.mapstruct.Mapping;
 
 import javax.persistence.*;
 
@@ -17,7 +18,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private RoleName roleName = RoleName.ROLE_USER;
+    private RoleName roleName;
 
     public Role(RoleName roleName) {
         this.roleName = roleName;

@@ -14,7 +14,7 @@ public interface DiaryPostMapper {
 
     DiaryPostResponse toDiaryPostResponse(DiaryPost diaryPost);
 
-    List<DiaryPostResponse> toDiaryPostResponse(List<DiaryPost> diaryPost);
+    List<DiaryPostResponse> toDiaryPostResponse(List<DiaryPost> diaryPosts);
 
     DiaryPost toDiaryPost(DiaryPostRequest diaryPostRequest);
 }

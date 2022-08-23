@@ -65,7 +65,7 @@ public class UserController {
      *      ]
      * }
      */
-    @PatchMapping("/setRoles")
+    @PutMapping("/roles")
     public ResponseEntity<Object> setRoles(@RequestBody @Valid RoleRequest roleRequest, Principal principal){
         System.out.println(principal);
         User user= userService.setRoles(roleRequest);
@@ -77,6 +77,18 @@ public class UserController {
     @PatchMapping("/banUser/{id}")
     public ResponseEntity<Object> banUser(@PathVariable("id") @Min(1) Long id, Principal principal){
         User user = userService.banUser(id);
+        return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
+    }
+
+    @PatchMapping("/makeDiaryPublic")
+    public ResponseEntity<Object> makeDiaryPublic(Principal principal){
+        User user = userService.makeDiaryPublic(principal.getName());
+        return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
+    }
+
+    @PatchMapping("/makeDiaryPrivate")
+    public ResponseEntity<Object> makeDiaryPrivate(Principal principal){
+        User user = userService.makeDiaryPrivate(principal.getName());
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
     }
 }

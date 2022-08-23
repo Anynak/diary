@@ -84,4 +84,18 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         return userRepository.save(user);
     }
+
+    @Override
+    public User makeDiaryPublic(String email) {
+        User user = getByEmail(email);
+        user.setPublicDiary(true);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User makeDiaryPrivate(String email) {
+        User user = getByEmail(email);
+        user.setPublicDiary(false);
+        return userRepository.save(user);
+    }
 }

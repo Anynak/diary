@@ -26,6 +26,9 @@ public class User {
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "public_diary")
+    private boolean publicDiary;
+
     @NonNull
     @Column(name = "name")
     private String name;

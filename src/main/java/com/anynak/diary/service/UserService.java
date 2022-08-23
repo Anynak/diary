@@ -17,9 +17,12 @@ public interface UserService {
     User registerUser(UserRequest userRequest);
     User saveUser(User user);
     User getUser(Long id);
-    User getByEmail(String login);
+    User getByEmail(String email);
 
     User banUser(Long id);
 
     User setRoles(RoleRequest roleRequest);
+
+    User makeDiaryPublic(String email);
+    User makeDiaryPrivate(String email);
 }
