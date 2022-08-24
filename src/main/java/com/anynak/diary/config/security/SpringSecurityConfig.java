@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -26,10 +27,25 @@ public class SpringSecurityConfig {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    @Qualifier("customAuthenticationEntryPoint")
-    AuthenticationEntryPoint authEntryPoint;
+    //@Autowired
+    //@Qualifier("customAuthenticationEntryPoint")
+    //AuthenticationEntryPoint authEntryPoint;
 
+    //@Autowired
+    //AccessDeniedHandler accessDeniedHandler;
+    //@Bean
+    //public AccessDeniedHandler accessDeniedHandler(){
+    //    return new CustomAccessDeniedHandler();
+    //}
+
+    @Bean
+    public AuthenticationEntryPoint AuthenticationEntryPoint(){
+        return new CustomAuthenticationEntryPoint();
+    }
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
     public SpringSecurityConfig(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
@@ -66,7 +82,8 @@ public class SpringSecurityConfig {
                 .httpBasic()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(authEntryPoint);
+                .authenticationEntryPoint(AuthenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler());
         return http.build();
     }
 
