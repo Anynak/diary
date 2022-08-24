@@ -5,11 +5,13 @@ import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.User;
 
+import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -91,4 +93,5 @@ public class UserController {
         User user = userService.makeDiaryPrivate(principal.getName());
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
     }
+
 }

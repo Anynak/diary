@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,6 +57,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntityBuilder.build(err);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(Exception ex) {
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+
+        List<String> messages = new ArrayList<>();
+        messages.add(messageSource.getMessage("access.denied", null, loc));
+        ApiError err = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                "Access is denied",
+                details,
+                messages);
+
+        return ResponseEntityBuilder.build(err);
+    }
+
     @ExceptionHandler( { AuthenticationException.class } )
     @ResponseBody
     public void handleAuthenticationException(Exception ex) {
@@ -63,8 +82,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         //https://stackoverflow.com/questions/19767267/handle-spring-security-authentication-exceptions-with-exceptionhandler
         //ex.printStackTrace();
         System.out.println("AAAAAAAA handleAuthenticationException");
-
-
 
     }
     @ExceptionHandler(ResourceNotFoundException.class)
