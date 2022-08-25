@@ -81,7 +81,9 @@ public class UserController {
         User user = userService.banUser(id);
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
     }
-
+    /**
+     * not for ROLE_BANNED
+     * */
     @PatchMapping("/makeDiaryPublic")
     public ResponseEntity<Object> makeDiaryPublic(Principal principal){
         User user = userService.makeDiaryPublic(principal.getName());

@@ -75,15 +75,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntityBuilder.build(err);
     }
 
-    @ExceptionHandler( { AuthenticationException.class } )
-    @ResponseBody
-    public void handleAuthenticationException(Exception ex) {
-        //https://www.baeldung.com/spring-security-exceptionhandler
-        //https://stackoverflow.com/questions/19767267/handle-spring-security-authentication-exceptions-with-exceptionhandler
-        //ex.printStackTrace();
-        System.out.println("AAAAAAAA handleAuthenticationException");
-
-    }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(
             ResourceNotFoundException ex) {

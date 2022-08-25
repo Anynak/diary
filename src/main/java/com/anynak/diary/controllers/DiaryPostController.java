@@ -2,6 +2,7 @@ package com.anynak.diary.controllers;
 
 import com.anynak.diary.dto.DiaryPostRequest;
 import com.anynak.diary.dto.DiaryPostResponse;
+import com.anynak.diary.dto.DiaryPostStrange;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.mapers.DiaryPostMapper;
@@ -90,6 +91,11 @@ public class DiaryPostController {
         if (diaryPostService.removePostByIdAndUser(postId, user) == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/strangePost")
+    public ResponseEntity<DiaryPostStrange> removePost(Principal principal) {
+        //DiaryPost randomDiaryPost = diaryPostService
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

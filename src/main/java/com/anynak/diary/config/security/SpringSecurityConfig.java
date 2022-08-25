@@ -38,10 +38,10 @@ public class SpringSecurityConfig {
     //    return new CustomAccessDeniedHandler();
     //}
 
-    @Bean
-    public AuthenticationEntryPoint AuthenticationEntryPoint(){
-        return new CustomAuthenticationEntryPoint();
-    }
+    //@Bean
+    //public AuthenticationEntryPoint AuthenticationEntryPoint(){
+    //    return new CustomAuthenticationEntryPoint();
+    //}
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
         return new CustomAccessDeniedHandler();
@@ -68,7 +68,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().disable().csrf().disable().authorizeRequests()
 
-                .antMatchers("/api/register", "/logout", "/login").permitAll()
+                .antMatchers("/api/register", "/logout", "/login", "/authenticationError").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/roles").hasRole("ADMIN")
                 .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
                 .antMatchers("/api/strangerPost", "/api/makeDiaryPublic").not().hasRole("BANNED")
@@ -82,7 +82,7 @@ public class SpringSecurityConfig {
                 .httpBasic()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(AuthenticationEntryPoint())
+                //.authenticationEntryPoint(AuthenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler());
         return http.build();
     }

@@ -2,6 +2,7 @@ package com.anynak.diary.mapers;
 
 import com.anynak.diary.dto.DiaryPostRequest;
 import com.anynak.diary.dto.DiaryPostResponse;
+import com.anynak.diary.dto.DiaryPostStrange;
 import com.anynak.diary.entity.DiaryPost;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -17,4 +18,6 @@ public interface DiaryPostMapper {
     List<DiaryPostResponse> toDiaryPostResponse(List<DiaryPost> diaryPosts);
 
     DiaryPost toDiaryPost(DiaryPostRequest diaryPostRequest);
+
+    DiaryPostStrange toDiaryPostStrange(DiaryPost diaryPost);
 }
