@@ -15,10 +15,10 @@ public interface DiaryPostRepository extends JpaRepository<DiaryPost, Long> {
     int removeDiaryPostByDiaryPostIdAndUser(Long diaryPostId, User user);
     Optional<DiaryPost>  getDiaryPostByDiaryPostIdAndUser(Long diaryPostId, User user);
     @Query(value="SELECT * FROM diary_post WHERE user_id!=?1 LIMIT ?2 OFFSET ?3 ", nativeQuery = true)
-    Optional<List<DiaryPost>> getPageExceptUserId(long id, int offset, int limit);
+    Optional<List<DiaryPost>> getPageExceptUserId(long id, int limit, int offset);
 
     @Query(value="SELECT * FROM diary_post WHERE user_id=?1 LIMIT ?2 OFFSET ?3 ", nativeQuery = true)
-    Optional<List<DiaryPost>> getPageByUserId(long id, int offset, int limit);
+    Optional<List<DiaryPost>> getPageByUserId(long id, int limit, int offset);
 
     int countDiaryPostByUserNot(User user);
     int countDiaryPostByUser(User user);

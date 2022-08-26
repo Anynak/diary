@@ -95,7 +95,10 @@ public class DiaryPostController {
     }
     @GetMapping("/strangePost")
     public ResponseEntity<DiaryPostStrange> removePost(Principal principal) {
-        //DiaryPost randomDiaryPost = diaryPostService
-        return new ResponseEntity<>(HttpStatus.OK);
+        User user = userService.getByEmail(principal.getName());
+        //User user = new User();
+        //user.setUserId(principal.);
+        DiaryPost randomDiaryPost = diaryPostService.getRandomPostByUserNot(user);
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostStrange(randomDiaryPost), HttpStatus.OK);
     }
 }

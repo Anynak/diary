@@ -1,5 +1,6 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.Utils;
 import com.anynak.diary.entity.DiaryPost;
 
 import com.anynak.diary.entity.User;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -35,4 +37,25 @@ public class DiaryPostServiceImpl implements DiaryPostService {
         return diaryPostRepository.removeDiaryPostByDiaryPostIdAndUser(diaryPostId, user);
     }
 
+    @Override
+    public List<DiaryPost> getPostPageById(long id, int limit, int offset) {
+        return null;
+    }
+
+    @Override
+    public DiaryPost getRandomPostByUserNot(User user) {
+        User user1 = new User();
+        //user1.setUserId(user.getUserId());
+        user1.setEmail("MaxPlanck@mail.com");
+        int n = diaryPostRepository.countDiaryPostByUserNot(user1);
+        int randNum = Utils.getRandomNumber(0,n);
+        Optional<List<DiaryPost>> optionalDiaryPost = diaryPostRepository.getPageExceptUserId(user.getUserId(),1,randNum);
+        if(optionalDiaryPost.isEmpty()){
+            throw new ResourceNotFoundException("no public posts");
+        }
+        return optionalDiaryPost.get().get(0);
+    }
+    private int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 }
