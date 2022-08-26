@@ -1,5 +1,6 @@
 package com.anynak.diary.controllers;
 
+import com.anynak.diary.config.security.data.UserDetailsImpl;
 import com.anynak.diary.dto.DiaryPostRequest;
 import com.anynak.diary.dto.DiaryPostResponse;
 import com.anynak.diary.dto.DiaryPostStrange;
@@ -11,6 +12,8 @@ import com.anynak.diary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +83,6 @@ public class DiaryPostController {
         DiaryPost updatedPost = diaryPostService.save(diaryPost);
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
     }
-    //TODO get stranger post
 
     /**
      * remove post
@@ -95,10 +97,18 @@ public class DiaryPostController {
     }
     @GetMapping("/strangePost")
     public ResponseEntity<DiaryPostStrange> removePost(Principal principal) {
-        User user = userService.getByEmail(principal.getName());
-        //User user = new User();
-        //user.setUserId(principal.);
+        User user = getUserFromSecurity();
         DiaryPost randomDiaryPost = diaryPostService.getRandomPostByUserNot(user);
+
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostStrange(randomDiaryPost), HttpStatus.OK);
+    }
+
+    private User getUserFromSecurity(){
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User();
+        user.setUserId(userDetails.getUserId());
+        user.setEmail(userDetails.getUsername());
+        return user;
     }
 }

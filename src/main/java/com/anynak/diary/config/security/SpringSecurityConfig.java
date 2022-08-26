@@ -69,9 +69,11 @@ public class SpringSecurityConfig {
         http.cors().disable().csrf().disable().authorizeRequests()
 
                 .antMatchers("/api/register", "/logout", "/login", "/authenticationError").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/roles").hasRole("ADMIN")
+                .antMatchers("/api/roles").hasRole("ADMIN")
                 .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
-                .antMatchers("/api/strangerPost", "/api/makeDiaryPublic").not().hasRole("BANNED")
+                .antMatchers("/api/makeDiaryPublic","/api/strangerPost").hasAnyRole("USER")
+                .antMatchers("/api/makeDiaryPublic","/api/strangerPost").not().hasAnyRole("BANNED")
+
                 .anyRequest().authenticated()
 
                 .and()

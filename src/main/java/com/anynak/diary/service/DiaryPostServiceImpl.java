@@ -44,18 +44,16 @@ public class DiaryPostServiceImpl implements DiaryPostService {
 
     @Override
     public DiaryPost getRandomPostByUserNot(User user) {
-        User user1 = new User();
-        //user1.setUserId(user.getUserId());
-        user1.setEmail("MaxPlanck@mail.com");
-        int n = diaryPostRepository.countDiaryPostByUserNot(user1);
+
+        int n = diaryPostRepository.countDiaryPostByUserNot(user);
+        System.out.println("AAAAAAAAAAAA");
         int randNum = Utils.getRandomNumber(0,n);
         Optional<List<DiaryPost>> optionalDiaryPost = diaryPostRepository.getPageExceptUserId(user.getUserId(),1,randNum);
-        if(optionalDiaryPost.isEmpty()){
-            throw new ResourceNotFoundException("no public posts");
-        }
+        //if(optionalDiaryPost.isEmpty()){
+        //    throw new ResourceNotFoundException("no public posts");
+        //}
+        System.out.println("wwwwwwwww");
         return optionalDiaryPost.get().get(0);
     }
-    private int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
+
 }
