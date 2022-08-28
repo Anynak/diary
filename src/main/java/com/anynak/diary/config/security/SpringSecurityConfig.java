@@ -68,12 +68,12 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().disable().csrf().disable().authorizeRequests()
 
-                .antMatchers("/api/register", "/logout", "/login", "/authenticationError").permitAll()
+                .antMatchers("/register", "/logout", "/login", "/authenticationError").permitAll()
+                //.antMatchers("/api/**").hasAnyRole("USER")
                 .antMatchers("/api/roles").hasRole("ADMIN")
                 .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
-                .antMatchers("/api/makeDiaryPublic","/api/strangerPost").hasAnyRole("USER")
-                .antMatchers("/api/makeDiaryPublic","/api/strangerPost").not().hasAnyRole("BANNED")
-
+                .antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasAnyRole("BANNED")
+                .antMatchers("/api/strangePost","/api/makeDiaryPublic").hasAnyRole("USER")
                 .anyRequest().authenticated()
 
                 .and()

@@ -47,7 +47,7 @@ public class DiaryPostController {
     @GetMapping("/diary")
     public ResponseEntity<List<DiaryPostResponse>> diary(Principal principal) {
         User user = userService.getByEmail(principal.getName());
-        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.CREATED);
+        return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.FOUND);
     }
 
     /**
@@ -95,6 +95,9 @@ public class DiaryPostController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    /**
+     * to get random stranger post
+     */
     @GetMapping("/strangePost")
     public ResponseEntity<DiaryPostStrange> removePost(Principal principal) {
         User user = getUserFromSecurity();
@@ -103,7 +106,7 @@ public class DiaryPostController {
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostStrange(randomDiaryPost), HttpStatus.OK);
     }
 
-    private User getUserFromSecurity(){
+    private User getUserFromSecurity() {
         UserDetailsImpl userDetails =
                 (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = new User();

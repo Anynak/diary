@@ -58,6 +58,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntityBuilder.build(err);
     }
 
+    @ExceptionHandler(AlreadyLoggedException.class)
+
+    public ResponseEntity<Object> handleUserAlreadyRegistered(Exception ex){
+        List<String> details = new ArrayList<>();
+        details.add(ex.getMessage());
+
+        List<String> messages = new ArrayList<>();
+        messages.add(messageSource.getMessage("login.userAlreadyLogged", null, loc));
+        ApiError err = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN,
+                "logg in is forbidden",
+                details,
+                messages);
+
+        return ResponseEntityBuilder.build(err);
+    }
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDeniedException(Exception ex) {
         List<String> details = new ArrayList<>();
@@ -67,7 +84,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         messages.add(messageSource.getMessage("access.denied", null, loc));
         ApiError err = new ApiError(
                 LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.FORBIDDEN,
                 "Access is denied",
                 details,
                 messages);
@@ -133,7 +150,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiError err = new ApiError(
                 LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.FORBIDDEN,
                 "Validation Error",
                 details,
                 messages);

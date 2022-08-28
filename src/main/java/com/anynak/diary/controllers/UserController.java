@@ -1,17 +1,19 @@
 package com.anynak.diary.controllers;
 
+import com.anynak.diary.config.security.data.UserDetailsImpl;
 import com.anynak.diary.dto.RoleRequest;
 import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.User;
 
+import com.anynak.diary.exceptions.AlreadyLoggedException;
 import com.anynak.diary.exceptions.UserAlreadyExistsException;
 import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,26 +38,7 @@ public class UserController {
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user), HttpStatus.OK);
     }
 
-    /**
-     * create user
-     * ex body:
-     * {
-     * "name": "Max",
-     * "email": "MaxPlanck@mail.com",
-     * "password":"Qwerty123",
-     * "repeatPassword":"Qwerty123"
-     * }
-     */
-    @PostMapping("/register")
-    public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
-        if (principal != null) {
-            return new ResponseEntity<>("you are already registered", HttpStatus.FORBIDDEN);
-        } else {
-            User user = userService.registerUser(userRequest);
-            UserResponse response = UserMapper.INSTANCE.toUserResponse(user);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }
-    }
+
     /**
      * only ROLE_ADMIN can patch roles
      * ex body:
@@ -69,7 +52,7 @@ public class UserController {
      */
     @PutMapping("/roles")
     public ResponseEntity<Object> setRoles(@RequestBody @Valid RoleRequest roleRequest, Principal principal){
-        System.out.println(principal);
+
         User user= userService.setRoles(roleRequest);
         return new ResponseEntity<>(UserMapper.INSTANCE.toUserResponse(user),HttpStatus.OK);
     }
