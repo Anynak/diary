@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -65,15 +66,18 @@ public class SpringSecurityConfig {
     }
 
     @Bean
+    //@Order(1)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().disable().csrf().disable().authorizeRequests()
 
                 .antMatchers("/register", "/logout", "/login", "/authenticationError").permitAll()
-                //.antMatchers("/api/**").hasAnyRole("USER")
+
                 .antMatchers("/api/roles").hasRole("ADMIN")
                 .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
-                .antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasAnyRole("BANNED")
+                .antMatchers("/api/strangePost","/api/makeDiaryPublic").access("!hasRole('ROLE_BANNED')")
                 .antMatchers("/api/strangePost","/api/makeDiaryPublic").hasAnyRole("USER")
+
+                .antMatchers("/api/**").fullyAuthenticated()
                 .anyRequest().authenticated()
 
                 .and()
@@ -89,4 +93,10 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
+    //@Bean
+            //@Order(2)
+    //public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
+        //    http.authorizeRequests().antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasAnyRole("BANNED");
+        //    return http.build();
+        //}
 }
