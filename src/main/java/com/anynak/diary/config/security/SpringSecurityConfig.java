@@ -66,19 +66,26 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    //@Order(1)
+    //@Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().disable().csrf().disable().authorizeRequests()
+        http
+                .cors().disable()
+                .csrf().disable()
+                .authorizeRequests()
 
                 .antMatchers("/register", "/logout", "/login", "/authenticationError").permitAll()
 
-                .antMatchers("/api/roles").hasRole("ADMIN")
-                .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
-                .antMatchers("/api/strangePost","/api/makeDiaryPublic").access("!hasRole('ROLE_BANNED')")
-                .antMatchers("/api/strangePost","/api/makeDiaryPublic").hasAnyRole("USER")
+                //.antMatchers("/api/roles").hasRole("ADMIN")
+                //.antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
+                //.antMatchers("/api/**").fullyAuthenticated()
+                //.antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasRole("BANNED")
 
-                .antMatchers("/api/**").fullyAuthenticated()
-                .anyRequest().authenticated()
+                .antMatchers("/api/strangePost","/api/makeDiaryPublic").fullyAuthenticated()
+
+                //antMatchers("/api/strangePost","/api/makeDiaryPublic").hasAnyRole("USER")
+                //.anyRequest().authenticated()
+
+
 
                 .and()
                 .formLogin()
@@ -94,9 +101,10 @@ public class SpringSecurityConfig {
     }
 
     //@Bean
-            //@Order(2)
+    //@Order(1)
     //public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
-        //    http.authorizeRequests().antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasAnyRole("BANNED");
-        //    return http.build();
-        //}
+    //        http.authorizeRequests().antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasAnyRole("BANNED");
+    //        return http.build();
+    //    }
+    //    //.access("!hasRole('ROLE_BANNED')")
 }
