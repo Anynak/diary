@@ -68,25 +68,18 @@ public class SpringSecurityConfig {
     @Bean
     //@Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
+        //https://www.marcobehler.com/guides/spring-security
         http
                 .cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
-
                 .antMatchers("/register", "/logout", "/login", "/authenticationError").permitAll()
-
-                //.antMatchers("/api/roles").hasRole("ADMIN")
-                //.antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
-                //.antMatchers("/api/**").fullyAuthenticated()
+                .antMatchers("/api/roles").hasRole("ADMIN")
+                .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
                 //.antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasRole("BANNED")
-
-                .antMatchers("/api/strangePost","/api/makeDiaryPublic").fullyAuthenticated()
-
-                //antMatchers("/api/strangePost","/api/makeDiaryPublic").hasAnyRole("USER")
-                //.anyRequest().authenticated()
-
-
-
+                .antMatchers("/api/strangePost","/api/makeDiaryPublic").access("isFullyAuthenticated() and !hasRole('BANNED')")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .and()
@@ -95,7 +88,6 @@ public class SpringSecurityConfig {
                 .httpBasic()
                 .and()
                 .exceptionHandling()
-                //.authenticationEntryPoint(AuthenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler());
         return http.build();
     }

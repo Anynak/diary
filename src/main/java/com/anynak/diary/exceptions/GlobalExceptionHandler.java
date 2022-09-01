@@ -150,7 +150,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiError err = new ApiError(
                 LocalDateTime.now(),
-                HttpStatus.FORBIDDEN,
+                HttpStatus.BAD_REQUEST,
                 "Validation Error",
                 details,
                 messages);
