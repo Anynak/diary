@@ -2,7 +2,6 @@ package com.anynak.diary.entity;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.mapstruct.Mapping;
 
 import javax.persistence.*;
 
@@ -20,14 +19,8 @@ public class Role {
     @Column(name = "role_name")
     private RoleName roleName;
 
-    public Role(RoleName roleName) {
-        this.roleName = roleName;
-
-    }
-
     public Role() {
     }
-
 
 
 }

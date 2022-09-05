@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+
 //https://habr.com/ru/post/528116/
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -54,6 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntityBuilder.build(err);
     }
+
     @ExceptionHandler(DiaryPostEditTimeException.class)
     public ResponseEntity<Object> handleDiaryPostEditTimeException(DiaryPostEditTimeException ex) {
         List<String> details = new ArrayList<>();
@@ -71,9 +73,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntityBuilder.build(err);
     }
+
     @ExceptionHandler(AlreadyLoggedException.class)
 
-    public ResponseEntity<Object> handleUserAlreadyRegistered(Exception ex){
+    public ResponseEntity<Object> handleUserAlreadyRegistered(Exception ex) {
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
 
@@ -88,6 +91,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntityBuilder.build(err);
     }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDeniedException(Exception ex) {
         List<String> details = new ArrayList<>();

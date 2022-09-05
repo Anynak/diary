@@ -1,8 +1,8 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.Const;
 import com.anynak.diary.Utils;
 import com.anynak.diary.entity.DiaryPost;
-
 import com.anynak.diary.entity.User;
 import com.anynak.diary.exceptions.DiaryPostEditTimeException;
 import com.anynak.diary.exceptions.ResourceNotFoundException;
@@ -29,7 +29,7 @@ public class DiaryPostServiceImpl implements DiaryPostService {
     @Override
     public DiaryPost findBuIdAndUser(Long postId, User user) {
         Optional<DiaryPost> optionalDiaryPost = diaryPostRepository.getDiaryPostByDiaryPostIdAndUser(postId, user);
-        return optionalDiaryPost.orElseThrow(()->new ResourceNotFoundException("post with id: " + postId + " and user: " + user.getEmail() + " not found"));
+        return optionalDiaryPost.orElseThrow(() -> new ResourceNotFoundException("post with id: " + postId + " and user: " + user.getEmail() + " not found"));
     }
 
 
@@ -42,9 +42,9 @@ public class DiaryPostServiceImpl implements DiaryPostService {
     @Override
     public DiaryPost editDiaryPost(DiaryPost newDiaryPost, User user) {
         long currentDate = Instant.now().getEpochSecond();
-        long createdSecAgo = currentDate-newDiaryPost.getCreation_UNIX_SEC();
-        if(createdSecAgo > 86400){
-            throw new DiaryPostEditTimeException("the permissible editing period is "+86400+" SEC. Post was created "+createdSecAgo+" SEC ago");
+        long createdSecAgo = currentDate - newDiaryPost.getCreation_UNIX_SEC();
+        if (createdSecAgo > Const.diaryPostEditPeriodSec) {
+            throw new DiaryPostEditTimeException("the permissible editing period is " + Const.diaryPostEditPeriodSec + " SEC. Post was created " + createdSecAgo + " SEC ago");
         }
         return save(newDiaryPost);
     }
@@ -58,9 +58,9 @@ public class DiaryPostServiceImpl implements DiaryPostService {
     public DiaryPost getRandomPostByUserNot(User user) {
 
         int n = diaryPostRepository.countDiaryPostByUserNot(user);
-        int randNum = Utils.getRandomNumber(0,n);
-        Optional<List<DiaryPost>> optionalDiaryPost = diaryPostRepository.getPageExceptUserId(user.getUserId(),1,randNum);
-        if(optionalDiaryPost.isEmpty()){
+        int randNum = Utils.getRandomNumber(0, n);
+        Optional<List<DiaryPost>> optionalDiaryPost = diaryPostRepository.getPageExceptUserId(user.getUserId(), 1, randNum);
+        if (optionalDiaryPost.isEmpty()) {
             throw new ResourceNotFoundException("no public posts");
         }
         return optionalDiaryPost.get().get(0);

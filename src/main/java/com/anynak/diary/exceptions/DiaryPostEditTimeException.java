@@ -1,8 +1,8 @@
 package com.anynak.diary.exceptions;
 
-public class DiaryPostEditTimeException extends RuntimeException{
+public class DiaryPostEditTimeException extends RuntimeException {
 
-    public DiaryPostEditTimeException(String message)  {
+    public DiaryPostEditTimeException(String message) {
         super(message);
     }
 }

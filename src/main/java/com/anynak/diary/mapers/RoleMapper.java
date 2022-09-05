@@ -8,7 +8,9 @@ import java.util.Set;
 
 public interface RoleMapper {
     RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
+
     RoleResponse toRoleResponse(Role role);
+
     Set<RoleResponse> toRoleResponse(Set<Role> roles);
 
 }

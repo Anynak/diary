@@ -1,6 +1,5 @@
 package com.anynak.diary.service;
 
-import com.anynak.diary.dto.DiaryPostRequest;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
 

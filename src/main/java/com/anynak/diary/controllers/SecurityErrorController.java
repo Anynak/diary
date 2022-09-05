@@ -17,7 +17,7 @@ public class SecurityErrorController {
     }
 
     @GetMapping("/authenticationError")
-    public void authenticationError(){
+    public void authenticationError() {
         throw new WrongAuthDataException("Wrong authentication data");
     }
 }

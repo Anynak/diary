@@ -1,6 +1,5 @@
 package com.anynak.diary.dto;
 
-import com.anynak.diary.entity.Role;
 import com.anynak.diary.entity.RoleName;
 import lombok.Data;
 

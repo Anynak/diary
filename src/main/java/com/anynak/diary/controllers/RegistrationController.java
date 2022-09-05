@@ -24,6 +24,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class RegistrationController {
     private final UserService userService;
+
     /**
      * create user
      * ex body:
@@ -37,7 +38,7 @@ public class RegistrationController {
     @PostMapping("/register")
     public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest, Principal principal, BindingResult bindingResult) {
         if (principal != null) {
-            throw  new AlreadyLoggedException("you are already logged");
+            throw new AlreadyLoggedException("you are already logged");
         } else {
             User user = userService.registerUser(userRequest);
             UserResponse response = UserMapper.INSTANCE.toUserResponse(user);

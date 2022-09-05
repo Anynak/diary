@@ -10,7 +10,6 @@ import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.repositories.RoleRepository;
 import com.anynak.diary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -2,19 +2,17 @@ package com.anynak.diary.config.security;
 
 import com.anynak.diary.config.security.data.UserDetailsServiceImpl;
 import com.anynak.diary.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
+
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
+
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -44,9 +42,10 @@ public class SpringSecurityConfig {
     //    return new CustomAuthenticationEntryPoint();
     //}
     @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
+    public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
+
     public SpringSecurityConfig(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
@@ -76,9 +75,9 @@ public class SpringSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/register", "/logout", "/login", "/authenticationError").permitAll()
                 .antMatchers("/api/roles").hasRole("ADMIN")
-                .antMatchers("/api/banUser/**").hasAnyRole("ADMIN","MODERATOR")
+                .antMatchers("/api/banUser/**").hasAnyRole("ADMIN", "MODERATOR")
                 //.antMatchers("/api/strangePost","/api/makeDiaryPublic").not().hasRole("BANNED")
-                .antMatchers("/api/strangePost","/api/makeDiaryPublic").access("isFullyAuthenticated() and !hasRole('BANNED')")
+                .antMatchers("/api/strangePost", "/api/makeDiaryPublic").access("isFullyAuthenticated() and !hasRole('BANNED')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

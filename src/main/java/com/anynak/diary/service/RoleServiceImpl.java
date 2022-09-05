@@ -1,12 +1,11 @@
 package com.anynak.diary.service;
 
-import com.anynak.diary.entity.RoleName;
 import com.anynak.diary.entity.Role;
+import com.anynak.diary.entity.RoleName;
 import com.anynak.diary.repositories.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor

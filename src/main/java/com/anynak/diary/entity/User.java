@@ -1,6 +1,7 @@
 package com.anynak.diary.entity;
 
-import lombok.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -13,7 +14,6 @@ import java.util.Set;
 @Entity
 @Data
 @SuperBuilder
-//@NoArgsConstructor
 @Table(name = "user")
 public class User {
 
@@ -54,8 +54,8 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     public void addRole(Role role) {
-        if(this.roles==null){
-            this.roles=new HashSet<>();
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
         }
         this.roles.add(role);
     }
