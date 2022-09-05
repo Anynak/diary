@@ -7,6 +7,7 @@ import com.anynak.diary.dto.DiaryPostStrange;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
 import com.anynak.diary.mapers.DiaryPostMapper;
+import com.anynak.diary.mapers.UserMapper;
 import com.anynak.diary.service.DiaryPostService;
 import com.anynak.diary.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class DiaryPostController {
      */
     @GetMapping("/post/{id}")
     public ResponseEntity<DiaryPostResponse> getUser(@PathVariable("id") @Min(1) Long id, Principal principal) {
-        User user = userService.getByEmail(principal.getName());
+        User user = getUserFromSecurity();
         DiaryPost diaryPost = diaryPostService.findBuIdAndUser(id, user);
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(diaryPost), HttpStatus.FOUND);
     }
@@ -46,7 +47,9 @@ public class DiaryPostController {
      */
     @GetMapping("/diary")
     public ResponseEntity<List<DiaryPostResponse>> diary(Principal principal) {
-        User user = userService.getByEmail(principal.getName());
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getUser(userDetails.getUserId());
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(user.getDiaryPosts()), HttpStatus.FOUND);
     }
 
@@ -59,7 +62,7 @@ public class DiaryPostController {
      */
     @PostMapping("/newPost")
     public ResponseEntity<DiaryPostResponse> addPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
-        User user = userService.getByEmail(principal.getName());
+        User user = getUserFromSecurity();
         DiaryPost diaryPost = DiaryPostMapper.INSTANCE.toDiaryPost(diaryPostRequest);
         diaryPost.setUser(user);
         diaryPost.setCreation_UNIX_SEC(Instant.now().getEpochSecond());
@@ -77,10 +80,11 @@ public class DiaryPostController {
      */
     @PatchMapping("/post")
     public ResponseEntity<DiaryPostResponse> editPost(@RequestBody @Valid DiaryPostRequest diaryPostRequest, Principal principal) {
-        User user = userService.getByEmail(principal.getName());
+
+        User user = getUserFromSecurity();
         DiaryPost diaryPost = diaryPostService.findBuIdAndUser(diaryPostRequest.getDiaryPostId(), user);
-        diaryPost.setText(diaryPostRequest.getText());
-        DiaryPost updatedPost = diaryPostService.save(diaryPost);
+        //diaryPost.setText(diaryPostRequest.getText());
+        DiaryPost updatedPost = diaryPostService.editDiaryPost(diaryPost, user);
         return new ResponseEntity<>(DiaryPostMapper.INSTANCE.toDiaryPostResponse(updatedPost), HttpStatus.CREATED);
     }
 
@@ -89,7 +93,7 @@ public class DiaryPostController {
      */
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<?> removePost(@PathVariable Long postId, Principal principal) {
-        User user = userService.getByEmail(principal.getName());
+        User user = getUserFromSecurity();
         if (diaryPostService.removePostByIdAndUser(postId, user) == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -1,5 +1,6 @@
 package com.anynak.diary.service;
 
+import com.anynak.diary.dto.DiaryPostRequest;
 import com.anynak.diary.entity.DiaryPost;
 import com.anynak.diary.entity.User;
 
@@ -12,6 +13,8 @@ public interface DiaryPostService {
     DiaryPost findBuIdAndUser(Long postId, User user);
 
     int removePostByIdAndUser(Long diaryPostId, User user);
+
+    DiaryPost editDiaryPost(DiaryPost newDiaryPost, User user);
 
     List<DiaryPost> getPostPageById(long id, int limit, int offset);
 

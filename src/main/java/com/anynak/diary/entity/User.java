@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Data
 @SuperBuilder
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name = "user")
 public class User {
 
@@ -29,7 +29,6 @@ public class User {
     @Column(name = "public_diary")
     private boolean publicDiary;
 
-    @NonNull
     @Column(name = "name")
     private String name;
 

@@ -15,20 +15,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Data
 public class UserDetailsImpl implements UserDetails {
 
     private final long userId;
     private final String userName;
     private final String password;
-    private final boolean active;
+    //private final boolean active;
     private final List<GrantedAuthority> authority;
 
     public UserDetailsImpl(User user) {
         this.userId = user.getUserId();
         this.userName = user.getEmail();
         this.password = user.getPassword();
-        this.active = user.isActive();
+        //this.active = user.isActive();
         this.authority = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());

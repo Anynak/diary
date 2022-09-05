@@ -4,12 +4,14 @@ import com.anynak.diary.Utils;
 import com.anynak.diary.entity.DiaryPost;
 
 import com.anynak.diary.entity.User;
+import com.anynak.diary.exceptions.DiaryPostEditTimeException;
 import com.anynak.diary.exceptions.ResourceNotFoundException;
 import com.anynak.diary.repositories.DiaryPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,16 @@ public class DiaryPostServiceImpl implements DiaryPostService {
     }
 
     @Override
+    public DiaryPost editDiaryPost(DiaryPost newDiaryPost, User user) {
+        long currentDate = Instant.now().getEpochSecond();
+        long createdSecAgo = currentDate-newDiaryPost.getCreation_UNIX_SEC();
+        if(createdSecAgo > 86400){
+            throw new DiaryPostEditTimeException("the permissible editing period is "+86400+" SEC. Post was created "+createdSecAgo+" SEC ago");
+        }
+        return save(newDiaryPost);
+    }
+
+    @Override
     public List<DiaryPost> getPostPageById(long id, int limit, int offset) {
         return null;
     }
@@ -46,13 +58,11 @@ public class DiaryPostServiceImpl implements DiaryPostService {
     public DiaryPost getRandomPostByUserNot(User user) {
 
         int n = diaryPostRepository.countDiaryPostByUserNot(user);
-        System.out.println("AAAAAAAAAAAA");
         int randNum = Utils.getRandomNumber(0,n);
         Optional<List<DiaryPost>> optionalDiaryPost = diaryPostRepository.getPageExceptUserId(user.getUserId(),1,randNum);
-        //if(optionalDiaryPost.isEmpty()){
-        //    throw new ResourceNotFoundException("no public posts");
-        //}
-        System.out.println("wwwwwwwww");
+        if(optionalDiaryPost.isEmpty()){
+            throw new ResourceNotFoundException("no public posts");
+        }
         return optionalDiaryPost.get().get(0);
     }
 

@@ -1,10 +1,12 @@
 package com.anynak.diary.mapers;
 
+import com.anynak.diary.config.security.data.UserDetailsImpl;
 import com.anynak.diary.dto.UserRequest;
 import com.anynak.diary.dto.UserResponse;
 import com.anynak.diary.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Mapper
 public interface UserMapper {
@@ -13,5 +15,7 @@ public interface UserMapper {
     UserResponse toUserResponse(User user);
 
     User toUser(UserRequest userRequest);
+    User toUser(UserDetailsImpl userDetails);
+
 
 }

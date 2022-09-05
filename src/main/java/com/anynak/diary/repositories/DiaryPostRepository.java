@@ -20,6 +20,7 @@ public interface DiaryPostRepository extends JpaRepository<DiaryPost, Long> {
     @Query(value="SELECT * FROM diary_post WHERE user_id=?1 LIMIT ?2 OFFSET ?3 ", nativeQuery = true)
     Optional<List<DiaryPost>> getPageByUserId(long id, int limit, int offset);
 
+
     int countDiaryPostByUserNot(User user);
     int countDiaryPostByUser(User user);
 }

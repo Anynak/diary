@@ -8,20 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +54,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntityBuilder.build(err);
     }
+    @ExceptionHandler(DiaryPostEditTimeException.class)
+    public ResponseEntity<Object> handleDiaryPostEditTimeException(DiaryPostEditTimeException ex) {
+        List<String> details = new ArrayList<>();
 
+        List<String> messages = new ArrayList<>();
+
+        messages.add(messageSource.getMessage("postEdit.timeout", null, loc));
+        details.add(ex.getMessage());
+        ApiError err = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN,
+                "DiaryPost edit time exception",
+                details,
+                messages);
+
+        return ResponseEntityBuilder.build(err);
+    }
     @ExceptionHandler(AlreadyLoggedException.class)
 
     public ResponseEntity<Object> handleUserAlreadyRegistered(Exception ex){
